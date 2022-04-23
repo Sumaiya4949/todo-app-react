@@ -11,12 +11,16 @@ type PropType = {
 export const TaskAddForm = (props: PropType) => {
   const { addTask, className } = props;
 
+  const [form] = Form.useForm();
+
   function onFinish(values: any) {
     addTask({
       isDone: false,
       id: makeId(),
       title: values.taskTitle,
     });
+
+    form.resetFields();
   }
 
   return (
@@ -25,6 +29,7 @@ export const TaskAddForm = (props: PropType) => {
       name="task-form"
       onFinish={onFinish}
       autoComplete="off"
+      form={form}
     >
       <Form.Item name="taskTitle">
         <Input.TextArea size="large" placeholder="Add new task" />
