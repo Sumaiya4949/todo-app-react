@@ -3,45 +3,14 @@ import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { TaskType } from "./types";
+import { useTodoList } from "./hooks/useTodoList";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
-  const initialTodos: TaskType[] = useMemo(() => {
-    return JSON.parse(localStorage.getItem("todos") || "[]");
-  }, []);
-
-  const [myTodos, setMyTodos] = useState<TaskType[]>(initialTodos);
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(myTodos));
-  }, [myTodos]);
-
-  const addNewTask = useCallback((task: TaskType): void => {
-    setMyTodos((prev) => {
-      return [...prev, task];
-    });
-  }, []);
-
-  const removeTaskById = useCallback((id: string): void => {
-    setMyTodos((prev) => {
-      return prev.filter((task) => task.id != id);
-    });
-  }, []);
-
-  const changeTaskStatus = useCallback((id: string, isDone: boolean): void => {
-    setMyTodos((prev) => {
-      return prev.map((task) => {
-        if (task.id !== id) {
-          return task;
-        }
-        return { ...task, isDone };
-      });
-    });
-  }, []);
+  const { addNewTask, myTodos, removeTaskById, changeTaskStatus } =
+    useTodoList();
 
   return (
     <Layout>
