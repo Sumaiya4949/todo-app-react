@@ -4,50 +4,21 @@ import styles from "./styles/App.module.scss";
 import { Task } from "./components/Task";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
+import { useState } from "react";
+import { TaskType } from "./types";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
-const fakeTodos = [
-  { isDone: false, title: "Amm Jamm", id: "1234" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "78290" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-  { isDone: true, title: "Kathal Jamm", id: "7890" },
-];
-const addNewTask = function () {
-  console.log("hello");
-};
 
 function App() {
+  const [myTodos, setMyTodos] = useState<TaskType[]>([]);
+
+  const addNewTask = function (task: TaskType) {
+    setMyTodos((prev) => {
+      return [...prev, task];
+    });
+  };
+
   return (
     <Layout>
       <Header className={styles.header}>
@@ -58,12 +29,10 @@ function App() {
 
       <Content className={styles.content}>
         <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
-        <TodoList todos={fakeTodos} />
+        <TodoList todos={myTodos} />
       </Content>
 
-      <Footer className={styles.footer}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
+      <Footer className={styles.footer}>TODO App 2022 Created by Sinthy</Footer>
     </Layout>
   );
 }
