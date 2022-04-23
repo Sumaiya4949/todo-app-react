@@ -4,14 +4,25 @@ import styles from "./styles/App.module.scss";
 import { Task } from "./components/Task";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TaskType } from "./types";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
-  const [myTodos, setMyTodos] = useState<TaskType[]>([]);
+  const initialTodosFromLocalStorage: string | null =
+    localStorage.getItem("todos");
+
+  const initialTodos: TaskType[] = JSON.parse(
+    initialTodosFromLocalStorage || "[]"
+  );
+
+  const [myTodos, setMyTodos] = useState<TaskType[]>(initialTodos);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(myTodos));
+  }, [myTodos]);
 
   const addNewTask = (task: TaskType) => {
     setMyTodos((prev) => {
