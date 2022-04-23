@@ -10,6 +10,38 @@ const { Title } = Typography;
 const fakeTodos = [
   { isDone: false, title: "Amm Jamm", id: "1234" },
   { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "78290" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
 ];
 const addNewTask = function () {
   console.log("hello");
@@ -23,9 +55,9 @@ function App() {
           TODO APP
         </Title>
       </Header>
-      <TaskAddForm addTask={addNewTask} />
 
       <Content className={styles.content}>
+        <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
         <TodoList todos={fakeTodos} />
       </Content>
 

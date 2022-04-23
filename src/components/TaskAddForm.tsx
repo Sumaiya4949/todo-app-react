@@ -5,10 +5,11 @@ import { v4 as makeId } from "uuid";
 
 type PropType = {
   addTask: (task: TaskType) => void;
+  className?: string;
 };
 
 export const TaskAddForm = (props: PropType) => {
-  const { addTask } = props;
+  const { addTask, className } = props;
 
   function onFinish(values: any) {
     addTask({
@@ -20,7 +21,7 @@ export const TaskAddForm = (props: PropType) => {
 
   return (
     <Form
-      className={styles.container}
+      className={`${styles.container} ${className}`}
       name="task-form"
       onFinish={onFinish}
       autoComplete="off"
