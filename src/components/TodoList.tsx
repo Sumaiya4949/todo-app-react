@@ -1,7 +1,9 @@
-import { List } from "antd";
+import { List, Typography } from "antd";
 import { TaskType } from "../types";
 import { Task } from "./Task";
 import styles from "../styles/TodoList.module.scss";
+
+const { Title } = Typography;
 
 type PropType = {
   todos: TaskType[];
@@ -12,6 +14,7 @@ export const TodoList = (props: PropType) => {
 
   return (
     <List
+      header={<Title level={3}>My Tasks</Title>}
       dataSource={todos}
       renderItem={(task, index) => (
         <List.Item>
