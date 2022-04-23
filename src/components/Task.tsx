@@ -9,11 +9,19 @@ type PropType = {
   task: TaskType;
   sl: number;
   className?: string;
-  removeMe: () => void;
+  removeTaskById: (id: string) => void;
 };
 
 export const Task = (props: PropType) => {
-  const { task, sl, className, removeMe } = props;
+  const { task, sl, className, removeTaskById } = props;
+
+  const removeMe = () => {
+    const result = window.confirm(`Do you want to delete "${task.title}"`);
+
+    if (result === true) {
+      removeTaskById(task.id);
+    }
+  };
 
   return (
     <Space className={`${styles.container} ${className}`}>
