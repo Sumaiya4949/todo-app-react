@@ -1,6 +1,6 @@
 import { Layout, Typography } from "antd";
 import "antd/dist/antd.css";
-import "./App.scss";
+import styles from "./styles/App.module.scss";
 import { Task } from "./components/Task";
 
 const { Header, Content, Footer } = Layout;
@@ -8,20 +8,20 @@ const { Title } = Typography;
 
 function App() {
   return (
-    <Layout className="layout">
-      <Header className="header">
-        <Title className="title" level={4}>
+    <Layout>
+      <Header className={styles.header}>
+        <Title className={styles.title} level={4}>
           TODO APP
         </Title>
       </Header>
 
-      <Content style={{ padding: "0 50px" }}>
-        <div className="site-layout-content">
+      <Content className={styles.content}>
+        <div>
           <Task sl={5} task={{ isDone: false, title: "Amm" }} />
         </div>
       </Content>
 
-      <Footer style={{ textAlign: "center" }}>
+      <Footer className={styles.footer}>
         Ant Design ©2018 Created by Ant UED
       </Footer>
     </Layout>

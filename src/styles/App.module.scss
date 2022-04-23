@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  align-items: center;
+
+  .title {
+    color: white;
+    margin: 0;
+  }
+}
+
+.content {
+  padding: 0 50px;
+}
+
+.footer {
+  text-align: center;
+}
