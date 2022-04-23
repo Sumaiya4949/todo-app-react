@@ -8,19 +8,21 @@ const { Title } = Typography;
 type PropType = {
   task: TaskType;
   sl: number;
+  className?: string;
 };
 
 export const Task = (props: PropType) => {
-  const { task, sl } = props;
+  const { task, sl, className } = props;
+
   return (
-    <Space className={styles.container}>
+    <Space className={`${styles.container} ${className}`}>
       <Title className={styles.title} level={4}>
         {sl}
       </Title>
       <Title className={styles.title} level={4}>
         {task.title}
       </Title>
-      <Checkbox>Done</Checkbox>
+      <Checkbox checked={task.isDone}>Done</Checkbox>
       <Button danger={true} type="text">
         <DeleteOutlined />
       </Button>

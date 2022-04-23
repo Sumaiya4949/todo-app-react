@@ -2,9 +2,14 @@ import { Layout, Typography } from "antd";
 import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { Task } from "./components/Task";
+import { TodoList } from "./components/TodoList";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
+const fakeTodos = [
+  { isDone: false, title: "Amm Jamm", id: "1234" },
+  { isDone: true, title: "Kathal Jamm", id: "7890" },
+];
 
 function App() {
   return (
@@ -16,13 +21,7 @@ function App() {
       </Header>
 
       <Content className={styles.content}>
-        <Task sl={5} task={{ isDone: false, title: "Amm" }} />
-        <Task sl={5} task={{ isDone: false, title: "Bllsdjks" }} />
-        <Task
-          sl={5}
-          task={{ isDone: false, title: "Bllsd sads dqwerq dasad ewqeq eqewq" }}
-        />
-        <Task sl={5} task={{ isDone: false, title: "sdnfas jdsafs" }} />
+        <TodoList todos={fakeTodos} />
       </Content>
 
       <Footer className={styles.footer}>
