@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  margin: 5px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+
+  & > :nth-child(1) {
+    flex: 1;
+  }
+
+  & > :nth-child(2) {
+    flex: 3;
+  }
+
+  & > :nth-child(3) {
+    flex: 1;
+  }
+
+  & > :nth-child(4) {
+    flex: 1;
+  }
+}
+
+.title {
+  margin-bottom: 0 !important;
+}

@@ -13,11 +13,15 @@ type PropType = {
 export const Task = (props: PropType) => {
   const { task, sl } = props;
   return (
-    <Space>
-      <Title level={4}>{sl}</Title>
-      <Title level={4}>{task.title}</Title>
+    <Space className={styles.container}>
+      <Title className={styles.title} level={4}>
+        {sl}
+      </Title>
+      <Title className={styles.title} level={4}>
+        {task.title}
+      </Title>
       <Checkbox>Done</Checkbox>
-      <Button danger={true}>
+      <Button danger={true} type="text">
         <DeleteOutlined />
       </Button>
     </Space>

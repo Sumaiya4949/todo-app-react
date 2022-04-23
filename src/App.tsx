@@ -16,9 +16,13 @@ function App() {
       </Header>
 
       <Content className={styles.content}>
-        <div>
-          <Task sl={5} task={{ isDone: false, title: "Amm" }} />
-        </div>
+        <Task sl={5} task={{ isDone: false, title: "Amm" }} />
+        <Task sl={5} task={{ isDone: false, title: "Bllsdjks" }} />
+        <Task
+          sl={5}
+          task={{ isDone: false, title: "Bllsd sads dqwerq dasad ewqeq eqewq" }}
+        />
+        <Task sl={5} task={{ isDone: false, title: "sdnfas jdsafs" }} />
       </Content>
 
       <Footer className={styles.footer}>
