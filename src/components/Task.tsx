@@ -1,4 +1,4 @@
-import { TaskType } from "../types";
+import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
 import styles from "../styles/Task.module.scss";
 import { Space, Button, Typography, Checkbox } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -10,14 +10,14 @@ type PropType = {
   task: TaskType;
   sl: number;
   className?: string;
-  removeTaskById: (id: string) => void;
-  changeTaskStatus: (id: string, isDone: boolean) => void;
+  removeTaskById: TaskRemover;
+  changeTaskStatus: TaskStatusChanger;
 };
 
 export const Task = (props: PropType) => {
   const { task, sl, className, removeTaskById, changeTaskStatus } = props;
 
-  const removeMe = () => {
+  const removeMe = (): void => {
     const result = window.confirm(`Do you want to delete "${task.title}"`);
 
     if (result === true) {

@@ -1,7 +1,6 @@
 import { Layout, Typography } from "antd";
 import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
-import { Task } from "./components/Task";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
 import { useEffect, useState } from "react";
@@ -24,19 +23,19 @@ const App = () => {
     localStorage.setItem("todos", JSON.stringify(myTodos));
   }, [myTodos]);
 
-  const addNewTask = (task: TaskType) => {
+  const addNewTask = (task: TaskType): void => {
     setMyTodos((prev) => {
       return [...prev, task];
     });
   };
 
-  const removeTaskById = (id: string) => {
+  const removeTaskById = (id: string): void => {
     setMyTodos((prev) => {
       return prev.filter((task) => task.id != id);
     });
   };
 
-  const changeTaskStatus = (id: string, isDone: boolean) => {
+  const changeTaskStatus = (id: string, isDone: boolean): void => {
     setMyTodos((prev) => {
       return prev.map((task) => {
         if (task.id !== id) {

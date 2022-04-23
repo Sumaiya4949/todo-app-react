@@ -1,5 +1,5 @@
 import { List, Typography } from "antd";
-import { TaskType } from "../types";
+import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
 import { Task } from "./Task";
 import styles from "../styles/TodoList.module.scss";
 
@@ -7,8 +7,8 @@ const { Title } = Typography;
 
 type PropType = {
   todos: TaskType[];
-  removeTaskById: (id: string) => void;
-  changeTaskStatus: (id: string, isDone: boolean) => void;
+  removeTaskById: TaskRemover;
+  changeTaskStatus: TaskStatusChanger;
 };
 
 export const TodoList = (props: PropType) => {
