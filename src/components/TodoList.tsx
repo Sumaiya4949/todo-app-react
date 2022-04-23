@@ -7,10 +7,11 @@ const { Title } = Typography;
 
 type PropType = {
   todos: TaskType[];
+  removeTaskById: (id: string) => void;
 };
 
 export const TodoList = (props: PropType) => {
-  const { todos } = props;
+  const { todos, removeTaskById } = props;
 
   return (
     <List
@@ -18,7 +19,12 @@ export const TodoList = (props: PropType) => {
       dataSource={todos}
       renderItem={(task, index) => (
         <List.Item>
-          <Task className={styles.task} task={task} sl={index + 1} />
+          <Task
+            className={styles.task}
+            task={task}
+            sl={index + 1}
+            removeTaskById={removeTaskById}
+          />
         </List.Item>
       )}
     />

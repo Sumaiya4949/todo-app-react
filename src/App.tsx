@@ -10,12 +10,18 @@ import { TaskType } from "./types";
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
-function App() {
+const App = () => {
   const [myTodos, setMyTodos] = useState<TaskType[]>([]);
 
-  const addNewTask = function (task: TaskType) {
+  const addNewTask = (task: TaskType) => {
     setMyTodos((prev) => {
       return [...prev, task];
+    });
+  };
+
+  const removeTaskById = (id: string) => {
+    setMyTodos((prev) => {
+      return prev.filter((task) => task.id != id);
     });
   };
 
@@ -29,12 +35,12 @@ function App() {
 
       <Content className={styles.content}>
         <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
-        <TodoList todos={myTodos} />
+        <TodoList todos={myTodos} removeTaskById={removeTaskById} />
       </Content>
 
       <Footer className={styles.footer}>TODO App 2022 Created by Sinthy</Footer>
     </Layout>
   );
-}
+};
 
 export default App;
