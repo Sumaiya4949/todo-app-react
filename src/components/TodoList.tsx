@@ -8,10 +8,11 @@ const { Title } = Typography;
 type PropType = {
   todos: TaskType[];
   removeTaskById: (id: string) => void;
+  changeTaskStatus: (id: string, isDone: boolean) => void;
 };
 
 export const TodoList = (props: PropType) => {
-  const { todos, removeTaskById } = props;
+  const { todos, removeTaskById, changeTaskStatus } = props;
 
   return (
     <List
@@ -24,6 +25,7 @@ export const TodoList = (props: PropType) => {
             task={task}
             sl={index + 1}
             removeTaskById={removeTaskById}
+            changeTaskStatus={changeTaskStatus}
           />
         </List.Item>
       )}

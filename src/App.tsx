@@ -25,6 +25,18 @@ const App = () => {
     });
   };
 
+  const changeTaskStatus = (id: string, isDone: boolean) => {
+    setMyTodos((prev) => {
+      return prev.map((task) => {
+        if (task.id !== id) {
+          return task;
+        }
+
+        return { ...task, isDone };
+      });
+    });
+  };
+
   return (
     <Layout>
       <Header className={styles.header}>
@@ -35,7 +47,11 @@ const App = () => {
 
       <Content className={styles.content}>
         <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
-        <TodoList todos={myTodos} removeTaskById={removeTaskById} />
+        <TodoList
+          todos={myTodos}
+          removeTaskById={removeTaskById}
+          changeTaskStatus={changeTaskStatus}
+        />
       </Content>
 
       <Footer className={styles.footer}>TODO App 2022 Created by Sinthy</Footer>
