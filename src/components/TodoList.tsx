@@ -13,6 +13,14 @@ type PropType = {
 export const TodoList = (props: PropType) => {
   const { todos, removeTaskById } = props;
 
+  const removeTaskFromList = (task: TaskType) => {
+    const result = window.confirm(`Do you want to delete "${task.title}"`);
+
+    if (result === true) {
+      removeTaskById(task.id);
+    }
+  };
+
   return (
     <List
       header={<Title level={3}>My Tasks</Title>}
@@ -23,7 +31,9 @@ export const TodoList = (props: PropType) => {
             className={styles.task}
             task={task}
             sl={index + 1}
-            removeTaskById={removeTaskById}
+            removeMe={() => {
+              removeTaskFromList(task);
+            }}
           />
         </List.Item>
       )}

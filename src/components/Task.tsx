@@ -9,18 +9,11 @@ type PropType = {
   task: TaskType;
   sl: number;
   className?: string;
-  removeTaskById: (id: string) => void;
+  removeMe: () => void;
 };
 
 export const Task = (props: PropType) => {
-  const { task, sl, className, removeTaskById } = props;
-
-  const removeThisTask = () => {
-    const result = window.confirm(`Do you want to delete "${task.title}"`);
-    if (result === true) {
-      removeTaskById(task.id);
-    }
-  };
+  const { task, sl, className, removeMe } = props;
 
   return (
     <Space className={`${styles.container} ${className}`}>
@@ -31,7 +24,7 @@ export const Task = (props: PropType) => {
         {task.title}
       </Title>
       <Checkbox checked={task.isDone}>Done</Checkbox>
-      <Button danger={true} type="text" onClick={removeThisTask}>
+      <Button danger={true} type="text" onClick={removeMe}>
         <DeleteOutlined />
       </Button>
     </Space>
