@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Layout, Typography } from "antd";
+import "antd/dist/antd.css";
+import "./App.scss";
+import { Task } from "./components/Task";
+
+const { Header, Content, Footer } = Layout;
+const { Title } = Typography;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout className="layout">
+      <Header className="header">
+        <Title className="title" level={4}>
+          TODO APP
+        </Title>
+      </Header>
+
+      <Content style={{ padding: "0 50px" }}>
+        <div className="site-layout-content">
+          <Task sl={5} task={{ isDone: false, title: "Amm" }} />
+        </div>
+      </Content>
+
+      <Footer style={{ textAlign: "center" }}>
+        Ant Design ©2018 Created by Ant UED
+      </Footer>
+    </Layout>
   );
 }
 
