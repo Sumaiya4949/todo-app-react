@@ -7,7 +7,9 @@ import { useCallback, useEffect, useReducer } from "react";
 import { TaskType } from "./types";
 import {
   ACTION_ADD_TODO,
+  ACTION_DO_TODO,
   ACTION_REMOVE_TODO,
+  ACTION_UNDO_TODO,
   initialAppState,
   todoReducer,
 } from "./reducers/todoReducer";
@@ -44,16 +46,15 @@ const App = () => {
     [dispath]
   );
 
-  const changeTaskStatus = useCallback((id: string, isDone: boolean): void => {
-    // setMyTodos((prev) => {
-    //   return prev.map((task) => {
-    //     if (task.id !== id) {
-    //       return task;
-    //     }
-    //     return { ...task, isDone };
-    //   });
-    // });
-  }, []);
+  const changeTaskStatus = useCallback(
+    (id: string, isDone: boolean): void => {
+      dispath({
+        type: isDone ? ACTION_DO_TODO : ACTION_UNDO_TODO,
+        payload: { id },
+      });
+    },
+    [dispath]
+  );
 
   return (
     <Layout>

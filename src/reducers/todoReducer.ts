@@ -27,6 +27,30 @@ export const todoReducer = (state: AppState, action: Action) => {
       };
     }
 
+    case ACTION_DO_TODO: {
+      const { id } = payload;
+      return {
+        myTodos: state.myTodos.map((task) => {
+          if (task.id !== id) {
+            return task;
+          }
+          return { ...task, isDone: true };
+        }),
+      };
+    }
+
+    case ACTION_UNDO_TODO: {
+      const { id } = payload;
+      return {
+        myTodos: state.myTodos.map((task) => {
+          if (task.id !== id) {
+            return task;
+          }
+          return { ...task, isDone: false };
+        }),
+      };
+    }
+
     default:
       return state;
   }
