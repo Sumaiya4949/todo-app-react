@@ -14,8 +14,16 @@ export const todoReducer = (state: AppState, action: Action) => {
 
   switch (type) {
     case ACTION_ADD_TODO: {
+      const { task } = payload;
       return {
-        myTodos: [...state.myTodos, payload],
+        myTodos: [...state.myTodos, task],
+      };
+    }
+
+    case ACTION_REMOVE_TODO: {
+      const { id } = payload;
+      return {
+        myTodos: state.myTodos.filter((task) => task.id !== id),
       };
     }
 

@@ -3,47 +3,56 @@ import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { TaskType } from "./types";
-import { initialAppState, todoReducer } from "./reducers/todoReducer";
+import {
+  ACTION_ADD_TODO,
+  ACTION_REMOVE_TODO,
+  initialAppState,
+  todoReducer,
+} from "./reducers/todoReducer";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
-  const something = useReducer(todoReducer, initialAppState);
+  const [appState, dispath] = useReducer(todoReducer, initialAppState);
 
-  const initialTodos: TaskType[] = useMemo(() => {
-    return JSON.parse(localStorage.getItem("todos") || "[]");
-  }, []);
-
-  const [myTodos, setMyTodos] = useState<TaskType[]>(initialTodos);
+  const { myTodos } = appState;
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(myTodos));
   }, [myTodos]);
 
-  const addNewTask = useCallback((task: TaskType): void => {
-    setMyTodos((prev) => {
-      return [...prev, task];
-    });
-  }, []);
+  const addNewTask = useCallback(
+    (task: TaskType): void => {
+      dispath({
+        type: ACTION_ADD_TODO,
+        payload: { task },
+      });
+    },
+    [dispath]
+  );
 
-  const removeTaskById = useCallback((id: string): void => {
-    setMyTodos((prev) => {
-      return prev.filter((task) => task.id != id);
-    });
-  }, []);
+  const removeTaskById = useCallback(
+    (id: string): void => {
+      dispath({
+        type: ACTION_REMOVE_TODO,
+        payload: { id },
+      });
+    },
+    [dispath]
+  );
 
   const changeTaskStatus = useCallback((id: string, isDone: boolean): void => {
-    setMyTodos((prev) => {
-      return prev.map((task) => {
-        if (task.id !== id) {
-          return task;
-        }
-        return { ...task, isDone };
-      });
-    });
+    // setMyTodos((prev) => {
+    //   return prev.map((task) => {
+    //     if (task.id !== id) {
+    //       return task;
+    //     }
+    //     return { ...task, isDone };
+    //   });
+    // });
   }, []);
 
   return (
