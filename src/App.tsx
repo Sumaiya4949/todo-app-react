@@ -3,13 +3,16 @@ import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
 import { TaskAddForm } from "./components/TaskAddForm";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { TaskType } from "./types";
+import { initialAppState, todoReducer } from "./reducers/todoReducer";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
+  const something = useReducer(todoReducer, initialAppState);
+
   const initialTodos: TaskType[] = useMemo(() => {
     return JSON.parse(localStorage.getItem("todos") || "[]");
   }, []);
