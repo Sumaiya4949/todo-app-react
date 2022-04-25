@@ -1,9 +1,10 @@
-import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
+import { TaskType } from "../types";
 import styles from "../styles/Task.module.scss";
 import { Space, Button, Typography, Checkbox } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { TodoContext } from "./TodoProvider";
 
 const { Title } = Typography;
 
@@ -11,12 +12,12 @@ type PropType = {
   task: TaskType;
   sl: number;
   className?: string;
-  removeTaskById: TaskRemover;
-  changeTaskStatus: TaskStatusChanger;
 };
 
 export const Task = (props: PropType) => {
-  const { task, sl, className, removeTaskById, changeTaskStatus } = props;
+  const { task, sl, className } = props;
+
+  const { removeTaskById, changeTaskStatus } = useContext(TodoContext);
 
   const removeMe = useCallback(() => {
     const result = window.confirm(`Do you want to delete "${task.title}"`);

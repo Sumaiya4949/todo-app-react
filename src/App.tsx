@@ -10,7 +10,7 @@ const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
-  const { myTodos, removeTaskById, changeTaskStatus } = useContext(TodoContext);
+  const { myTodos } = useContext(TodoContext);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(myTodos));
@@ -26,11 +26,7 @@ const App = () => {
 
       <Content className={styles.content}>
         <TaskAddForm className={styles.todoForm} />
-        <TodoList
-          todos={myTodos}
-          removeTaskById={removeTaskById}
-          changeTaskStatus={changeTaskStatus}
-        />
+        <TodoList />
       </Content>
 
       <Footer className={styles.footer}>TODO App 2022 Created by Sinthy</Footer>

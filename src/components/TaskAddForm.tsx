@@ -1,4 +1,3 @@
-import { TaskType } from "../types";
 import { Form, Input, Button } from "antd";
 import styles from "../styles/TaskAddForm.module.scss";
 import { v4 as makeId } from "uuid";
