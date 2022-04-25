@@ -2,21 +2,23 @@ import { TaskType } from "../types";
 import { Form, Input, Button } from "antd";
 import styles from "../styles/TaskAddForm.module.scss";
 import { v4 as makeId } from "uuid";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { TodoContext } from "./TodoProvider";
 
 type PropType = {
-  addTask: (task: TaskType) => void;
   className?: string;
 };
 
 export const TaskAddForm = (props: PropType) => {
-  const { addTask, className } = props;
+  const { className } = props;
+
+  const { addNewTask } = useContext(TodoContext);
 
   const [form] = Form.useForm();
 
   const onFinish = useCallback(
     (values: any) => {
-      addTask({
+      addNewTask({
         isDone: false,
         id: makeId(),
         title: values.taskTitle,

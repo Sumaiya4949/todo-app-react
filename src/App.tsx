@@ -10,8 +10,7 @@ const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 const App = () => {
-  const { myTodos, addNewTask, removeTaskById, changeTaskStatus } =
-    useContext(TodoContext);
+  const { myTodos, removeTaskById, changeTaskStatus } = useContext(TodoContext);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(myTodos));
@@ -26,7 +25,7 @@ const App = () => {
       </Header>
 
       <Content className={styles.content}>
-        <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
+        <TaskAddForm className={styles.todoForm} />
         <TodoList
           todos={myTodos}
           removeTaskById={removeTaskById}
