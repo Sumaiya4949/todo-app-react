@@ -26,7 +26,7 @@ export const useTodoList = () => {
    * Add new todo to the todo list
    * @description
    *  - Saves the new todo in the state.
-   * @param {TodoType} todo Task which should be added
+   * @param {TodoType} todo todo which should be added
    */
   const addNewTodo = useCallback((todo: TodoType): void => {
     setMyTodos((prev) => {
@@ -35,10 +35,10 @@ export const useTodoList = () => {
   }, []);
 
   /**
-   * Remove task by id from todo list
+   * Remove todo by id from todo list
    * @description
    *  - Removes todo from the state.
-   * @param {string} id Id of the task which should be removed
+   * @param {string} id Id of the todo which should be removed
    */
   const removeTodoById = useCallback((id: string): void => {
     setMyTodos((prev) => {
@@ -47,11 +47,11 @@ export const useTodoList = () => {
   }, []);
 
   /**
-   * Change checked status of this task by id
+   * Change checked status of this todo by id
    * @description
    *  - Checks or unchecks todo from state.
-   * @param {string} id Id of the task which should be checked or unchecked
-   * @param {boolean} isDone Flag to determine if the task should be checked or unchecked
+   * @param {string} id Id of the todo which should be checked or unchecked
+   * @param {boolean} isDone Flag to determine if the todo should be checked or unchecked
    */
   const changeTodoStatus = useCallback((id: string, isDone: boolean): void => {
     setMyTodos((prev) => {

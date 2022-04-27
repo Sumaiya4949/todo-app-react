@@ -9,7 +9,7 @@ type PropType = {
   className?: string;
 };
 /**
- * React component to visualize a form for task addition
+ * React component to visualize a form for todo addition
  *
  * @param {PropType} props Props of the component
  * @returns {JSX} JSX of this component

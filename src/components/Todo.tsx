@@ -16,20 +16,20 @@ type PropType = {
 };
 
 /**
- * React component to visualize a task
+ * React component to visualize a todo
  *
  * @param {PropType} props Props of the component
- * @returns {JSX} JSX of the task component
+ * @returns {JSX} JSX of the todo component
  */
 export const Todo = (props: PropType) => {
   // Unpack props
   const { todo, sl, className, removeTodoById, changeTodoStatus } = props;
 
   /**
-   * Remove this task after user confirmation
+   * Remove this todo after user confirmation
    * @description
    *  - Asks user to confirm.
-   *  - Removes this task from todo-list by calling remove function from prop.
+   *  - Removes this todo from todo-list by calling remove function from prop.
    */
   const removeMe = useCallback(() => {
     const result = window.confirm(`Do you want to delete "${todo.title}"`);
@@ -39,9 +39,9 @@ export const Todo = (props: PropType) => {
   }, [todo.title, todo.id]);
 
   /**
-   * Change the status of this task
+   * Change the status of this todo
    * @description
-   *  - Calls status changer function from props with this task's id and the status (done or not done).
+   *  - Calls status changer function from props with this todo's id and the status (done or not done).
    */
   const toggleMyStatus = useCallback(
     (event: CheckboxChangeEvent) => {

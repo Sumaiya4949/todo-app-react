@@ -15,7 +15,7 @@ type PropType = {
  * React component to visualize todo list
  *
  * @param {PropType} props Props of this component
- * @returns {JSX} JSX of this task component
+ * @returns {JSX} JSX of this todo component
  */
 
 export const TodoList = (props: PropType) => {
