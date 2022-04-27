@@ -1,9 +1,9 @@
-export type TaskType = {
+export type TodoType = {
   isDone: boolean;
   title: string;
-  id: string
+  id: string;
 };
 
-export type TaskRemover = (id: string) => void
+export type TodoRemover = (id: string) => void;
 
-export type TaskStatusChanger = (id: string, isDone: boolean) => void
+export type TodoStatusChanger = (id: string, isDone: boolean) => void;

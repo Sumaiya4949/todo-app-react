@@ -1,5 +1,5 @@
-import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
-import styles from "../styles/Task.module.scss";
+import { TodoRemover, TodoStatusChanger, TodoType } from "../types";
+import styles from "../styles/Todo.module.scss";
 import { Space, Button, Typography, Checkbox } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
@@ -8,46 +8,46 @@ import { useCallback } from "react";
 const { Title } = Typography;
 
 type PropType = {
-  task: TaskType;
+  todo: TodoType;
   sl: number;
   className?: string;
-  removeTaskById: TaskRemover;
-  changeTaskStatus: TaskStatusChanger;
+  removeTodoById: TodoRemover;
+  changeTodoStatus: TodoStatusChanger;
 };
 
 /**
- * React component to visualize a task
+ * React component to visualize a todo
  *
  * @param {PropType} props Props of the component
- * @returns {JSX} JSX of the task component
+ * @returns {JSX} JSX of the todo component
  */
-export const Task = (props: PropType) => {
+export const Todo = (props: PropType) => {
   // Unpack props
-  const { task, sl, className, removeTaskById, changeTaskStatus } = props;
+  const { todo, sl, className, removeTodoById, changeTodoStatus } = props;
 
   /**
-   * Remove this task after user confirmation
+   * Remove this todo after user confirmation
    * @description
    *  - Asks user to confirm.
-   *  - Removes this task from todo-list by calling remove function from prop.
+   *  - Removes this todo from todo-list by calling remove function from prop.
    */
   const removeMe = useCallback(() => {
-    const result = window.confirm(`Do you want to delete "${task.title}"`);
+    const result = window.confirm(`Do you want to delete "${todo.title}"`);
     if (result) {
-      removeTaskById(task.id);
+      removeTodoById(todo.id);
     }
-  }, [task.title, task.id]);
+  }, [todo.title, todo.id]);
 
   /**
-   * Change the status of this task
+   * Change the status of this todo
    * @description
-   *  - Calls status changer function from props with this task's id and the status (done or not done).
+   *  - Calls status changer function from props with this todo's id and the status (done or not done).
    */
   const toggleMyStatus = useCallback(
     (event: CheckboxChangeEvent) => {
-      changeTaskStatus(task.id, event.target.checked);
+      changeTodoStatus(todo.id, event.target.checked);
     },
-    [task.id]
+    [todo.id]
   );
 
   // JSX
@@ -58,10 +58,10 @@ export const Task = (props: PropType) => {
       </Title>
 
       <Title className={styles.title} level={4}>
-        {task.title}
+        {todo.title}
       </Title>
 
-      <Checkbox checked={task.isDone} onChange={toggleMyStatus}>
+      <Checkbox checked={todo.isDone} onChange={toggleMyStatus}>
         Done
       </Checkbox>
 

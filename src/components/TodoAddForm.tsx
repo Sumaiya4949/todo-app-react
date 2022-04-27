@@ -1,38 +1,38 @@
-import { TaskType } from "../types";
+import { TodoType } from "../types";
 import { Form, Input, Button } from "antd";
-import styles from "../styles/TaskAddForm.module.scss";
+import styles from "../styles/TodoAddForm.module.scss";
 import { v4 as makeId } from "uuid";
 import { useCallback } from "react";
 
 type PropType = {
-  addTask: (task: TaskType) => void;
+  addTodo: (todo: TodoType) => void;
   className?: string;
 };
 /**
- * React component to visualize a form for task addition
+ * React component to visualize a form for todo addition
  *
  * @param {PropType} props Props of the component
  * @returns {JSX} JSX of this component
  */
-export const TaskAddForm = (props: PropType) => {
+export const TodoAddForm = (props: PropType) => {
   // Unpack props
-  const { addTask, className } = props;
+  const { addTodo, className } = props;
 
   const [form] = Form.useForm();
 
   /**
    * Handle form submission
    * @description
-   *  - Creates new task by calling a function from props.
+   *  - Creates new todo by calling a function from props.
    *  - Reset the form fields.
    * @param {any} values Values of all the form fields
    */
   const onFinish = useCallback(
     (values: any) => {
-      addTask({
+      addTodo({
         isDone: false,
         id: makeId(),
-        title: values.taskTitle,
+        title: values.todoTitle,
       });
 
       form.resetFields();
@@ -44,13 +44,13 @@ export const TaskAddForm = (props: PropType) => {
   return (
     <Form
       className={`${styles.container} ${className}`}
-      name="task-form"
+      name="todo-form"
       onFinish={onFinish}
       autoComplete="off"
       form={form}
     >
-      <Form.Item name="taskTitle">
-        <Input.TextArea size="large" placeholder="Add new task" />
+      <Form.Item name="todoTitle">
+        <Input.TextArea size="large" placeholder="Add new todo" />
       </Form.Item>
 
       <Form.Item>

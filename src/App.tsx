@@ -2,7 +2,7 @@ import { Layout, Typography } from "antd";
 import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
-import { TaskAddForm } from "./components/TaskAddForm";
+import { TodoAddForm } from "./components/TodoAddForm";
 import { useTodoList } from "./hooks/useTodoList";
 
 const { Header, Content, Footer } = Layout;
@@ -13,7 +13,7 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { addNewTask, myTodos, removeTaskById, changeTaskStatus } =
+  const { addNewTodo, myTodos, removeTodoById, changeTodoStatus } =
     useTodoList();
 
   //JSX
@@ -26,11 +26,11 @@ const App = () => {
       </Header>
 
       <Content className={styles.content}>
-        <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
+        <TodoAddForm className={styles.todoForm} addTodo={addNewTodo} />
         <TodoList
           todos={myTodos}
-          removeTaskById={removeTaskById}
-          changeTaskStatus={changeTaskStatus}
+          removeTodoById={removeTodoById}
+          changeTodoStatus={changeTodoStatus}
         />
       </Content>
 

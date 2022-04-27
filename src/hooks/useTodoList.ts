@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { TaskType } from "../types";
+import { TodoType } from "../types";
 
 /**
  * React custom hook to management of todo list
@@ -7,11 +7,11 @@ import { TaskType } from "../types";
  */
 export const useTodoList = () => {
   // Load todos from local storage
-  const initialTodos: TaskType[] = useMemo(() => {
+  const initialTodos: TodoType[] = useMemo(() => {
     return JSON.parse(localStorage.getItem("todos") || "[]");
   }, []);
 
-  const [myTodos, setMyTodos] = useState<TaskType[]>(initialTodos);
+  const [myTodos, setMyTodos] = useState<TodoType[]>(initialTodos);
 
   /**
    * Effect to save todos to local storage when todos change
@@ -26,43 +26,43 @@ export const useTodoList = () => {
    * Add new todo to the todo list
    * @description
    *  - Saves the new todo in the state.
-   * @param {TaskType} task Task which should be added
+   * @param {TodoType} todo todo which should be added
    */
-  const addNewTask = useCallback((task: TaskType): void => {
+  const addNewTodo = useCallback((todo: TodoType): void => {
     setMyTodos((prev) => {
-      return [...prev, task];
+      return [...prev, todo];
     });
   }, []);
 
   /**
-   * Remove task by id from todo list
+   * Remove todo by id from todo list
    * @description
    *  - Removes todo from the state.
-   * @param {string} id Id of the task which should be removed
+   * @param {string} id Id of the todo which should be removed
    */
-  const removeTaskById = useCallback((id: string): void => {
+  const removeTodoById = useCallback((id: string): void => {
     setMyTodos((prev) => {
-      return prev.filter((task) => task.id != id);
+      return prev.filter((todo) => todo.id != id);
     });
   }, []);
 
   /**
-   * Change checked status of this task by id
+   * Change checked status of this todo by id
    * @description
    *  - Checks or unchecks todo from state.
-   * @param {string} id Id of the task which should be checked or unchecked
-   * @param {boolean} isDone Flag to determine if the task should be checked or unchecked
+   * @param {string} id Id of the todo which should be checked or unchecked
+   * @param {boolean} isDone Flag to determine if the todo should be checked or unchecked
    */
-  const changeTaskStatus = useCallback((id: string, isDone: boolean): void => {
+  const changeTodoStatus = useCallback((id: string, isDone: boolean): void => {
     setMyTodos((prev) => {
-      return prev.map((task) => {
-        if (task.id !== id) {
-          return task;
+      return prev.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
         }
-        return { ...task, isDone };
+        return { ...todo, isDone };
       });
     });
   }, []);
 
-  return { addNewTask, myTodos, removeTaskById, changeTaskStatus };
+  return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
 };

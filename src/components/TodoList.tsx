@@ -1,40 +1,40 @@
 import { List, Typography } from "antd";
-import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
-import { Task } from "./Task";
+import { TodoRemover, TodoStatusChanger, TodoType } from "../types";
+import { Todo } from "./Todo";
 import styles from "../styles/TodoList.module.scss";
 
 const { Title } = Typography;
 
 type PropType = {
-  todos: TaskType[];
-  removeTaskById: TaskRemover;
-  changeTaskStatus: TaskStatusChanger;
+  todos: TodoType[];
+  removeTodoById: TodoRemover;
+  changeTodoStatus: TodoStatusChanger;
 };
 
 /**
  * React component to visualize todo list
  *
  * @param {PropType} props Props of this component
- * @returns {JSX} JSX of this task component
+ * @returns {JSX} JSX of this todo component
  */
 
 export const TodoList = (props: PropType) => {
   // Unpack props
-  const { todos, removeTaskById, changeTaskStatus } = props;
+  const { todos, removeTodoById, changeTodoStatus } = props;
 
   // JSX
   return (
     <List
-      header={<Title level={3}>My Tasks</Title>}
+      header={<Title level={3}>My Todos</Title>}
       dataSource={todos}
-      renderItem={(task, index) => (
+      renderItem={(todo, index) => (
         <List.Item>
-          <Task
-            className={styles.task}
-            task={task}
+          <Todo
+            className={styles.todo}
+            todo={todo}
             sl={index + 1}
-            removeTaskById={removeTaskById}
-            changeTaskStatus={changeTaskStatus}
+            removeTodoById={removeTodoById}
+            changeTodoStatus={changeTodoStatus}
           />
         </List.Item>
       )}
