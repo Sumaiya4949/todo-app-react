@@ -30,7 +30,7 @@ export const TodoList = (props: PropType) => {
       renderItem={(todo, index) => (
         <List.Item>
           <Todo
-            className={styles.task}
+            className={styles.todo}
             todo={todo}
             sl={index + 1}
             removeTodoById={removeTodoById}
