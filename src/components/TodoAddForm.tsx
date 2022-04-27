@@ -1,6 +1,6 @@
 import { TaskType } from "../types";
 import { Form, Input, Button } from "antd";
-import styles from "../styles/TaskAddForm.module.scss";
+import styles from "../styles/TodoAddForm.module.scss";
 import { v4 as makeId } from "uuid";
 import { useCallback } from "react";
 
@@ -14,7 +14,7 @@ type PropType = {
  * @param {PropType} props Props of the component
  * @returns {JSX} JSX of this component
  */
-export const TaskAddForm = (props: PropType) => {
+export const TodoAddForm = (props: PropType) => {
   // Unpack props
   const { addTask, className } = props;
 

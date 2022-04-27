@@ -2,7 +2,7 @@ import { Layout, Typography } from "antd";
 import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
-import { TaskAddForm } from "./components/TaskAddForm";
+import { TodoAddForm } from "./components/TodoAddForm";
 import { useTodoList } from "./hooks/useTodoList";
 
 const { Header, Content, Footer } = Layout;
@@ -26,7 +26,7 @@ const App = () => {
       </Header>
 
       <Content className={styles.content}>
-        <TaskAddForm className={styles.todoForm} addTask={addNewTask} />
+        <TodoAddForm className={styles.todoForm} addTask={addNewTask} />
         <TodoList
           todos={myTodos}
           removeTaskById={removeTaskById}

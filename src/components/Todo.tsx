@@ -1,5 +1,5 @@
 import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
-import styles from "../styles/Task.module.scss";
+import styles from "../styles/Todo.module.scss";
 import { Space, Button, Typography, Checkbox } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
@@ -21,7 +21,7 @@ type PropType = {
  * @param {PropType} props Props of the component
  * @returns {JSX} JSX of the task component
  */
-export const Task = (props: PropType) => {
+export const Todo = (props: PropType) => {
   // Unpack props
   const { task, sl, className, removeTaskById, changeTaskStatus } = props;
 

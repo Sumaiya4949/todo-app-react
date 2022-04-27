@@ -1,6 +1,6 @@
 import { List, Typography } from "antd";
 import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
-import { Task } from "./Task";
+import { Todo } from "./Todo";
 import styles from "../styles/TodoList.module.scss";
 
 const { Title } = Typography;
@@ -29,7 +29,7 @@ export const TodoList = (props: PropType) => {
       dataSource={todos}
       renderItem={(task, index) => (
         <List.Item>
-          <Task
+          <Todo
             className={styles.task}
             task={task}
             sl={index + 1}
