@@ -8,11 +8,11 @@ import { useCallback } from "react";
 const { Title } = Typography;
 
 type PropType = {
-  task: TodoType;
+  todo: TodoType;
   sl: number;
   className?: string;
-  removeTaskById: TodoRemover;
-  changeTaskStatus: TodoStatusChanger;
+  removeTodoById: TodoRemover;
+  changeTodoStatus: TodoStatusChanger;
 };
 
 /**
@@ -23,7 +23,7 @@ type PropType = {
  */
 export const Todo = (props: PropType) => {
   // Unpack props
-  const { task, sl, className, removeTaskById, changeTaskStatus } = props;
+  const { todo, sl, className, removeTodoById, changeTodoStatus } = props;
 
   /**
    * Remove this task after user confirmation
@@ -32,11 +32,11 @@ export const Todo = (props: PropType) => {
    *  - Removes this task from todo-list by calling remove function from prop.
    */
   const removeMe = useCallback(() => {
-    const result = window.confirm(`Do you want to delete "${task.title}"`);
+    const result = window.confirm(`Do you want to delete "${todo.title}"`);
     if (result) {
-      removeTaskById(task.id);
+      removeTodoById(todo.id);
     }
-  }, [task.title, task.id]);
+  }, [todo.title, todo.id]);
 
   /**
    * Change the status of this task
@@ -45,9 +45,9 @@ export const Todo = (props: PropType) => {
    */
   const toggleMyStatus = useCallback(
     (event: CheckboxChangeEvent) => {
-      changeTaskStatus(task.id, event.target.checked);
+      changeTodoStatus(todo.id, event.target.checked);
     },
-    [task.id]
+    [todo.id]
   );
 
   // JSX
@@ -58,10 +58,10 @@ export const Todo = (props: PropType) => {
       </Title>
 
       <Title className={styles.title} level={4}>
-        {task.title}
+        {todo.title}
       </Title>
 
-      <Checkbox checked={task.isDone} onChange={toggleMyStatus}>
+      <Checkbox checked={todo.isDone} onChange={toggleMyStatus}>
         Done
       </Checkbox>
 

@@ -13,7 +13,7 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { addNewTask, myTodos, removeTaskById, changeTaskStatus } =
+  const { addNewTodo, myTodos, removeTodoById, changeTodoStatus } =
     useTodoList();
 
   //JSX
@@ -26,11 +26,11 @@ const App = () => {
       </Header>
 
       <Content className={styles.content}>
-        <TodoAddForm className={styles.todoForm} addTask={addNewTask} />
+        <TodoAddForm className={styles.todoForm} addTodo={addNewTodo} />
         <TodoList
           todos={myTodos}
-          removeTaskById={removeTaskById}
-          changeTaskStatus={changeTaskStatus}
+          removeTodoById={removeTodoById}
+          changeTodoStatus={changeTodoStatus}
         />
       </Content>
 

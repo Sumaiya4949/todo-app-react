@@ -7,8 +7,8 @@ const { Title } = Typography;
 
 type PropType = {
   todos: TodoType[];
-  removeTaskById: TodoRemover;
-  changeTaskStatus: TodoStatusChanger;
+  removeTodoById: TodoRemover;
+  changeTodoStatus: TodoStatusChanger;
 };
 
 /**
@@ -20,21 +20,21 @@ type PropType = {
 
 export const TodoList = (props: PropType) => {
   // Unpack props
-  const { todos, removeTaskById, changeTaskStatus } = props;
+  const { todos, removeTodoById, changeTodoStatus } = props;
 
   // JSX
   return (
     <List
-      header={<Title level={3}>My Tasks</Title>}
+      header={<Title level={3}>My Todos</Title>}
       dataSource={todos}
-      renderItem={(task, index) => (
+      renderItem={(todo, index) => (
         <List.Item>
           <Todo
             className={styles.task}
-            task={task}
+            todo={todo}
             sl={index + 1}
-            removeTaskById={removeTaskById}
-            changeTaskStatus={changeTaskStatus}
+            removeTodoById={removeTodoById}
+            changeTodoStatus={changeTodoStatus}
           />
         </List.Item>
       )}
