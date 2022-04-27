@@ -8,12 +8,25 @@ type PropType = {
   addTask: (task: TaskType) => void;
   className?: string;
 };
-
+/**
+ * React component to visualize a form for task addition
+ *
+ * @param {PropType} props Props of the component
+ * @returns {JSX} JSX of this component
+ */
 export const TaskAddForm = (props: PropType) => {
+  // Unpack props
   const { addTask, className } = props;
 
   const [form] = Form.useForm();
 
+  /**
+   * Handle form submission
+   * @description
+   *  - Creates new task by calling a function from props
+   *  - Reset the form fields
+   * @param {any} values Values of all the form fields
+   */
   const onFinish = useCallback(
     (values: any) => {
       addTask({
@@ -27,6 +40,7 @@ export const TaskAddForm = (props: PropType) => {
     [form]
   );
 
+  //JSX
   return (
     <Form
       className={`${styles.container} ${className}`}

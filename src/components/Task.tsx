@@ -15,9 +15,22 @@ type PropType = {
   changeTaskStatus: TaskStatusChanger;
 };
 
+/**
+ * React component to visualize a task
+ *
+ * @param {PropType} props Props of the component
+ * @returns {JSX} JSX of the task component
+ */
 export const Task = (props: PropType) => {
+  // Unpack props
   const { task, sl, className, removeTaskById, changeTaskStatus } = props;
 
+  /**
+   * Remove this task after user confirmation
+   * @description
+   *  - Asks user to confirm
+   *  - Removes this task from todo-list by calling remove function from prop
+   */
   const removeMe = useCallback(() => {
     const result = window.confirm(`Do you want to delete "${task.title}"`);
     if (result) {
@@ -25,6 +38,11 @@ export const Task = (props: PropType) => {
     }
   }, [task.title, task.id]);
 
+  /**values
+   * Change the status of this task
+   * @description
+   *  - Calls status changer function from props with this task's id and the status (done or not done)
+   */
   const toggleMyStatus = useCallback(
     (event: CheckboxChangeEvent) => {
       changeTaskStatus(task.id, event.target.checked);
@@ -32,6 +50,7 @@ export const Task = (props: PropType) => {
     [task.id]
   );
 
+  // JSX
   return (
     <Space className={`${styles.container} ${className}`}>
       <Title className={styles.title} level={4}>
