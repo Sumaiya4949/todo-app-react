@@ -1,4 +1,4 @@
-import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
+import { TodoRemover, TodoStatusChanger, TodoType } from "../types";
 import styles from "../styles/Todo.module.scss";
 import { Space, Button, Typography, Checkbox } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -8,11 +8,11 @@ import { useCallback } from "react";
 const { Title } = Typography;
 
 type PropType = {
-  task: TaskType;
+  task: TodoType;
   sl: number;
   className?: string;
-  removeTaskById: TaskRemover;
-  changeTaskStatus: TaskStatusChanger;
+  removeTaskById: TodoRemover;
+  changeTaskStatus: TodoStatusChanger;
 };
 
 /**

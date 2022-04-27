@@ -1,14 +1,14 @@
 import { List, Typography } from "antd";
-import { TaskRemover, TaskStatusChanger, TaskType } from "../types";
+import { TodoRemover, TodoStatusChanger, TodoType } from "../types";
 import { Todo } from "./Todo";
 import styles from "../styles/TodoList.module.scss";
 
 const { Title } = Typography;
 
 type PropType = {
-  todos: TaskType[];
-  removeTaskById: TaskRemover;
-  changeTaskStatus: TaskStatusChanger;
+  todos: TodoType[];
+  removeTaskById: TodoRemover;
+  changeTaskStatus: TodoStatusChanger;
 };
 
 /**

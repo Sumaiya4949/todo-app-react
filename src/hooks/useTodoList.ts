@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { TaskType } from "../types";
+import { TodoType } from "../types";
 
 /**
  * React custom hook to management of todo list
@@ -7,11 +7,11 @@ import { TaskType } from "../types";
  */
 export const useTodoList = () => {
   // Load todos from local storage
-  const initialTodos: TaskType[] = useMemo(() => {
+  const initialTodos: TodoType[] = useMemo(() => {
     return JSON.parse(localStorage.getItem("todos") || "[]");
   }, []);
 
-  const [myTodos, setMyTodos] = useState<TaskType[]>(initialTodos);
+  const [myTodos, setMyTodos] = useState<TodoType[]>(initialTodos);
 
   /**
    * Effect to save todos to local storage when todos change
@@ -26,9 +26,9 @@ export const useTodoList = () => {
    * Add new todo to the todo list
    * @description
    *  - Saves the new todo in the state.
-   * @param {TaskType} task Task which should be added
+   * @param {TodoType} task Task which should be added
    */
-  const addNewTask = useCallback((task: TaskType): void => {
+  const addNewTask = useCallback((task: TodoType): void => {
     setMyTodos((prev) => {
       return [...prev, task];
     });

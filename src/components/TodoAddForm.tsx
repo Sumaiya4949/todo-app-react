@@ -1,11 +1,11 @@
-import { TaskType } from "../types";
+import { TodoType } from "../types";
 import { Form, Input, Button } from "antd";
 import styles from "../styles/TodoAddForm.module.scss";
 import { v4 as makeId } from "uuid";
 import { useCallback } from "react";
 
 type PropType = {
-  addTask: (task: TaskType) => void;
+  addTask: (task: TodoType) => void;
   className?: string;
 };
 /**
