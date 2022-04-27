@@ -38,7 +38,7 @@ export const Task = (props: PropType) => {
     }
   }, [task.title, task.id]);
 
-  /**values
+  /**
    * Change the status of this task
    * @description
    *  - Calls status changer function from props with this task's id and the status (done or not done)

@@ -11,9 +11,18 @@ type PropType = {
   changeTaskStatus: TaskStatusChanger;
 };
 
+/**
+ * React component to visualize todo list
+ *
+ * @param {PropType} props Props of this component
+ * @returns {JSX} JSX of this task component
+ */
+
 export const TodoList = (props: PropType) => {
+  // Unpack props
   const { todos, removeTaskById, changeTaskStatus } = props;
 
+  // JSX
   return (
     <List
       header={<Title level={3}>My Tasks</Title>}
