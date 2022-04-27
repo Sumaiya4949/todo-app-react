@@ -28,8 +28,8 @@ export const Task = (props: PropType) => {
   /**
    * Remove this task after user confirmation
    * @description
-   *  - Asks user to confirm
-   *  - Removes this task from todo-list by calling remove function from prop
+   *  - Asks user to confirm.
+   *  - Removes this task from todo-list by calling remove function from prop.
    */
   const removeMe = useCallback(() => {
     const result = window.confirm(`Do you want to delete "${task.title}"`);
@@ -41,7 +41,7 @@ export const Task = (props: PropType) => {
   /**
    * Change the status of this task
    * @description
-   *  - Calls status changer function from props with this task's id and the status (done or not done)
+   *  - Calls status changer function from props with this task's id and the status (done or not done).
    */
   const toggleMyStatus = useCallback(
     (event: CheckboxChangeEvent) => {

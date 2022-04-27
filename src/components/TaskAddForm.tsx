@@ -23,8 +23,8 @@ export const TaskAddForm = (props: PropType) => {
   /**
    * Handle form submission
    * @description
-   *  - Creates new task by calling a function from props
-   *  - Reset the form fields
+   *  - Creates new task by calling a function from props.
+   *  - Reset the form fields.
    * @param {any} values Values of all the form fields
    */
   const onFinish = useCallback(
