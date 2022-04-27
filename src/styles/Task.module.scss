@@ -1,3 +1,4 @@
+// Task container
 .container {
   display: flex;
   justify-content: space-around;
@@ -5,23 +6,25 @@
   padding: 5px;
   border-radius: 5px;
 
+  // First immediate child
   & > :nth-child(1) {
     flex: 1;
   }
-
+  // Second immediate child
   & > :nth-child(2) {
     flex: 3;
   }
-
+  // Third immediate child
   & > :nth-child(3) {
     flex: 1;
   }
-
+  // Fourth immediate child
   & > :nth-child(4) {
     flex: 1;
   }
 }
 
+// Task title with serial number
 .title {
   margin-bottom: 0 !important;
 }
