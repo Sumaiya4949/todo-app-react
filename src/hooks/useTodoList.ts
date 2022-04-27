@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TaskType } from "../types";
 
+/**
+ * React custom hook to management of todo list
+ * @returns {object} Todo list and some functions to add, remove and check/uncheck funtionality
+ */
 export const useTodoList = () => {
   // Load todos from local storage
   const initialTodos: TaskType[] = useMemo(() => {

@@ -8,10 +8,15 @@ import { useTodoList } from "./hooks/useTodoList";
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
+/**
+ * React componet to visualize the todo application
+ * @returns {JSX} JSX of the app component
+ */
 const App = () => {
   const { addNewTask, myTodos, removeTaskById, changeTaskStatus } =
     useTodoList();
 
+  //JSX
   return (
     <Layout>
       <Header className={styles.header}>
