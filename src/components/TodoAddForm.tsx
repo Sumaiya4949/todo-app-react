@@ -3,6 +3,7 @@ import { Form, Input, Button } from "antd";
 import styles from "../styles/TodoAddForm.module.scss";
 import { v4 as makeId } from "uuid";
 import { useCallback } from "react";
+import { PlusSquareOutlined } from "@ant-design/icons";
 
 type PropType = {
   addTodo: (todo: TodoType) => void;
@@ -54,7 +55,8 @@ export const TodoAddForm = (props: PropType) => {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="default" htmlType="submit">
+          <PlusSquareOutlined />
           Submit
         </Button>
       </Form.Item>
