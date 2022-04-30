@@ -1,4 +1,4 @@
-import { Layout, Typography } from "antd";
+import { Layout, Typography, Image } from "antd";
 import "antd/dist/antd.css";
 import styles from "./styles/App.module.scss";
 import { TodoList } from "./components/TodoList";
@@ -20,6 +20,7 @@ const App = () => {
   return (
     <Layout>
       <Header className={styles.header}>
+        <Image src="logo192.png" className={styles.logo} />
         <Title className={styles.title} level={4}>
           TODO APP
         </Title>
