@@ -49,15 +49,18 @@ export const TodoAddForm = (props: PropType) => {
       onFinish={onFinish}
       autoComplete="off"
       form={form}
+      validateMessages={{
+        required: "Cannot be empty",
+      }}
     >
-      <Form.Item name="todoTitle">
+      <Form.Item name="todoTitle" rules={[{ required: true }]}>
         <Input.TextArea size="large" placeholder="Add new todo" />
       </Form.Item>
 
       <Form.Item>
-        <Button type="default" htmlType="submit">
+        <Button type="default" htmlType="submit" size="middle">
           <PlusSquareOutlined />
-          Submit
+          Add todo
         </Button>
       </Form.Item>
     </Form>
