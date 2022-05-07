@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { initializeApp } from "firebase/app";
+import { BrowserRouter } from "react-router-dom";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,6 +22,10 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-root.render(<App />);
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
 
 serviceWorkerRegistration.register();

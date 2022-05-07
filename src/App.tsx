@@ -1,21 +1,18 @@
 import { Layout, Typography, Image } from "antd";
 import "antd/dist/antd.css";
+import { Route, Routes } from "react-router-dom";
+import { MyTodos } from "./pages/MyTodos";
+import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
-import { TodoList } from "./components/TodoList";
-import { TodoAddForm } from "./components/TodoAddForm";
-import { useTodoList } from "./hooks/useTodoList";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
 
 /**
- * React componet to visualize the todo application
+ * React component to visualize the todo application
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { addNewTodo, myTodos, removeTodoById, changeTodoStatus } =
-    useTodoList();
-
   //JSX
   return (
     <Layout>
@@ -27,12 +24,10 @@ const App = () => {
       </Header>
 
       <Content className={styles.content}>
-        <TodoAddForm className={styles.todoForm} addTodo={addNewTodo} />
-        <TodoList
-          todos={myTodos}
-          removeTodoById={removeTodoById}
-          changeTodoStatus={changeTodoStatus}
-        />
+        <Routes>
+          <Route path="mytodos" element={<MyTodos />} />
+          <Route path="register" element={<RegistrationForm />} />
+        </Routes>
       </Content>
 
       <Footer className={styles.footer}>TODO App 2022 Created by Sinthy</Footer>
