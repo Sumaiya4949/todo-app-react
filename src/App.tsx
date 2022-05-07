@@ -3,6 +3,7 @@ import "antd/dist/antd.css";
 import { useContext } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import { AuthContext } from "./components/Auth";
+import { AuthUserBadge } from "./components/AuthUserBadge";
 import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
@@ -26,6 +27,13 @@ const App = () => {
         <Title className={styles.title} level={4}>
           <Link to="/">TODO APP</Link>
         </Title>
+        {isLoggedIn && (
+          <AuthUserBadge
+            className={styles.authUserBadge}
+            logout={() => {}}
+            userName={"Sumaiya Sultana"}
+          />
+        )}
       </Header>
 
       <Content className={styles.content}>
