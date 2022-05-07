@@ -24,18 +24,21 @@ export const LoginForm = () => {
     hash.update(values.password);
 
     try {
-      await axios.post("/auth/login", {
+      const { data } = await axios.post("/auth/login", {
         email: values.email,
         passwordHash: hash.digest("hex"),
       });
+
+      const { user } = data;
 
       notification.success({
         message: `Login successfull`,
         description: "Taking you to the todo app",
         placement: "top",
+        duration: 0.5,
       });
 
-      setLoginStatus(true);
+      setLoginStatus(true, user);
     } catch (error: any) {
       notification.error({
         message: `Login failed`,

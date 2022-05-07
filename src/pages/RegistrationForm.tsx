@@ -32,6 +32,7 @@ export const RegistrationForm = () => {
         message: `Registration successfull`,
         description: "Taking you back to login page",
         placement: "top",
+        duration: 1,
       });
 
       navigate("/");

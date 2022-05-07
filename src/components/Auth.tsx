@@ -1,8 +1,10 @@
 import { createContext, useState } from "react";
+import { User } from "../types";
 
 type AuthInfo = {
   isLoggedIn: boolean;
-  setLoginStatus: (status: boolean) => void;
+  setLoginStatus: (status: boolean, user: User | null) => void;
+  user: User | null;
 };
 
 type PropType = {
@@ -12,6 +14,7 @@ type PropType = {
 export const AuthContext = createContext<AuthInfo>({
   isLoggedIn: false,
   setLoginStatus: () => {},
+  user: null,
 });
 
 export const Auth = (props: PropType) => {
@@ -19,15 +22,26 @@ export const Auth = (props: PropType) => {
 
   const initialLoginState = localStorage.getItem("isLoggedIn") === "true";
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialLoginState);
+  const initialAuthUserStateStr = localStorage.getItem("authUser");
+  const initialAuthUserState =
+    initialAuthUserStateStr && initialAuthUserStateStr !== "null"
+      ? JSON.parse(initialAuthUserStateStr)
+      : null;
 
-  const setLoginStatus = (status: boolean) => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialLoginState);
+  const [authUser, setAuthUser] = useState<User | null>(initialAuthUserState);
+
+  const setLoginStatus = (status: boolean, user: User | null) => {
     setIsLoggedIn(status);
+    setAuthUser(user);
     localStorage.setItem("isLoggedIn", status.toString());
+    localStorage.setItem("authUser", JSON.stringify(user));
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setLoginStatus }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, setLoginStatus, user: authUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
