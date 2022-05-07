@@ -4,7 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 type PropType = {
   className?: string;
   logout: () => void;
-  userName: string;
+  userName?: string;
 };
 
 export const AuthUserBadge = (props: PropType) => {
@@ -23,7 +23,7 @@ export const AuthUserBadge = (props: PropType) => {
       placement="bottom"
       icon={<UserOutlined />}
     >
-      {userName.split(" ")[0]}
+      {userName?.split(" ")[0]}
     </Dropdown.Button>
   );
 };

@@ -18,7 +18,7 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { isLoggedIn, setLoginStatus } = useContext(AuthContext);
+  const { isLoggedIn, setLoginStatus, user } = useContext(AuthContext);
 
   const logout = async () => {
     try {
@@ -28,9 +28,10 @@ const App = () => {
         message: `Logout successfull`,
         description: "Taking you to the login page",
         placement: "top",
+        duration: 0.5,
       });
 
-      setLoginStatus(false);
+      setLoginStatus(false, null);
     } catch (error) {
       notification.error({
         message: `Logout failed`,
@@ -53,7 +54,7 @@ const App = () => {
           <AuthUserBadge
             className={styles.authUserBadge}
             logout={logout}
-            userName={"Sumaiya Sultana"}
+            userName={user?.fullname}
           />
         )}
       </Header>
