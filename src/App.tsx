@@ -1,4 +1,4 @@
-import { Layout, Typography, Image, notification } from "antd";
+import { Layout, Typography, Image, notification, Modal } from "antd";
 import "antd/dist/antd.css";
 import { useContext } from "react";
 import { Route, Routes, Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
 import axios from "axios";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -20,26 +21,32 @@ const { Title } = Typography;
 const App = () => {
   const { isLoggedIn, setLoginStatus, user } = useContext(AuthContext);
 
-  const logout = async () => {
-    try {
-      await axios.post("/auth/logout");
+  const logout = () => {
+    Modal.confirm({
+      icon: <ExclamationCircleOutlined />,
+      content: <Typography.Title level={4}>Are you sure?</Typography.Title>,
+      async onOk() {
+        try {
+          await axios.post("/auth/logout");
 
-      notification.success({
-        message: `Logout successfull`,
-        description: "Taking you to the login page",
-        placement: "top",
-        duration: 0.5,
-      });
+          notification.success({
+            message: `Logout successfull`,
+            description: "Taking you to the login page",
+            placement: "top",
+            duration: 0.5,
+          });
 
-      setLoginStatus(false, null);
-    } catch (error) {
-      notification.error({
-        message: `Logout failed`,
-        description: `Please try again.`,
-        placement: "top",
-        duration: 1,
-      });
-    }
+          setLoginStatus(false, null);
+        } catch (error) {
+          notification.error({
+            message: `Logout failed`,
+            description: `Please try again.`,
+            placement: "top",
+            duration: 1,
+          });
+        }
+      },
+    });
   };
 
   //JSX
