@@ -1,14 +1,22 @@
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, notification } from "antd";
 
 const { Title } = Typography;
 
 export const RegistrationForm = () => {
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    notification.success({
+      message: `Registration successfull`,
+      description: "Taking you back to login page",
+      placement: "top",
+    });
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = () => {
+    notification.error({
+      message: `Registration failed`,
+      description: "Please try again",
+      placement: "top",
+    });
   };
 
   return (
