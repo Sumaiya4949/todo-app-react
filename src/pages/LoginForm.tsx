@@ -1,13 +1,15 @@
 import { Form, Input, Button, Typography, notification, Alert } from "antd";
 import axios from "axios";
 import { SHA3 } from "sha3";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
+import { useContext } from "react";
+import { AuthContext } from "../components/Auth";
 
 const { Title } = Typography;
 
 export const LoginForm = () => {
-  const navigate = useNavigate();
+  const { setLoginStatus } = useContext(AuthContext);
 
   const onFinishFailed = () => {
     notification.error({
@@ -33,7 +35,7 @@ export const LoginForm = () => {
         placement: "top",
       });
 
-      navigate("/");
+      setLoginStatus(true);
     } catch (error: any) {
       notification.error({
         message: `Login failed`,
