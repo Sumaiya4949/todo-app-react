@@ -11,7 +11,7 @@ export const LoginForm = () => {
 
   const onFinishFailed = () => {
     notification.error({
-      message: `Registration failed`,
+      message: `Login failed`,
       description: "Please try again",
       placement: "top",
     });
@@ -22,22 +22,21 @@ export const LoginForm = () => {
     hash.update(values.password);
 
     try {
-      await axios.put("/auth/register", {
+      await axios.post("/auth/login", {
         email: values.email,
-        fullname: values.fullname,
         passwordHash: hash.digest("hex"),
       });
 
       notification.success({
-        message: `Registration successfull`,
-        description: "Taking you back to login page",
+        message: `Login successfull`,
+        description: "Taking you to the todo app",
         placement: "top",
       });
 
       navigate("/");
     } catch (error: any) {
       notification.error({
-        message: `Registration failed`,
+        message: `Login failed`,
         description: `${error?.response?.data?.message}. Please try again.`,
         placement: "top",
       });
