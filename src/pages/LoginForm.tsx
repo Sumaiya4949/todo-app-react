@@ -1,12 +1,12 @@
-import { Form, Input, Button, Typography, notification } from "antd";
+import { Form, Input, Button, Typography, notification, Alert } from "antd";
 import axios from "axios";
 import { SHA3 } from "sha3";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
 
 const { Title } = Typography;
 
-export const RegistrationForm = () => {
+export const LoginForm = () => {
   const navigate = useNavigate();
 
   const onFinishFailed = () => {
@@ -60,7 +60,7 @@ export const RegistrationForm = () => {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Title level={4}>Please register yourself to use this app</Title>
+      <Title level={4}>Please log in to use todo app</Title>
       <br />
       <Form.Item
         name={"email"}
@@ -70,19 +70,6 @@ export const RegistrationForm = () => {
           {
             required: true,
             message: "Please input a valid email!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Full Name"
-        name="fullname"
-        rules={[
-          {
-            required: true,
-            message: "Please input your full name!",
           },
         ]}
       >
@@ -112,9 +99,20 @@ export const RegistrationForm = () => {
         }}
       >
         <Button type="primary" htmlType="submit">
-          Register
+          Log in
         </Button>
       </Form.Item>
+
+      <Alert
+        message={
+          <>
+            Don't have an account? Please register{" "}
+            <Link to="/register">here</Link>.
+          </>
+        }
+        type="info"
+        showIcon
+      />
     </Form>
   );
 };

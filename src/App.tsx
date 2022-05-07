@@ -1,6 +1,7 @@
 import { Layout, Typography, Image } from "antd";
 import "antd/dist/antd.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Link } from "react-router-dom";
+import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
@@ -19,7 +20,7 @@ const App = () => {
       <Header className={styles.header}>
         <Image src="logo192.png" className={styles.logo} />
         <Title className={styles.title} level={4}>
-          TODO APP
+          <Link to="/">TODO APP</Link>
         </Title>
       </Header>
 
@@ -27,6 +28,7 @@ const App = () => {
         <Routes>
           <Route path="mytodos" element={<MyTodos />} />
           <Route path="register" element={<RegistrationForm />} />
+          <Route path="/" element={<LoginForm />} />
         </Routes>
       </Content>
 

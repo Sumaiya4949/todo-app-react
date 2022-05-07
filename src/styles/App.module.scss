@@ -11,6 +11,10 @@
   // App title
   .title {
     margin: 0;
+
+    a {
+      color: unset;
+    }
   }
 
   .logo {
