@@ -4,6 +4,7 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { initializeApp } from "firebase/app";
 import { BrowserRouter } from "react-router-dom";
+import { Auth } from "./components/Auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,7 +25,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter>
-    <App />
+    <Auth>
+      <App />
+    </Auth>
   </BrowserRouter>
 );
 

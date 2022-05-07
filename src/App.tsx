@@ -1,6 +1,9 @@
 import { Layout, Typography, Image } from "antd";
 import "antd/dist/antd.css";
-import { Route, Routes } from "react-router-dom";
+import { useContext } from "react";
+import { Route, Routes, Link } from "react-router-dom";
+import { AuthContext } from "./components/Auth";
+import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
@@ -13,20 +16,22 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+
   //JSX
   return (
     <Layout>
       <Header className={styles.header}>
         <Image src="logo192.png" className={styles.logo} />
         <Title className={styles.title} level={4}>
-          TODO APP
+          <Link to="/">TODO APP</Link>
         </Title>
       </Header>
 
       <Content className={styles.content}>
         <Routes>
-          <Route path="mytodos" element={<MyTodos />} />
           <Route path="register" element={<RegistrationForm />} />
+          <Route path="/" element={isLoggedIn ? <MyTodos /> : <LoginForm />} />
         </Routes>
       </Content>
 

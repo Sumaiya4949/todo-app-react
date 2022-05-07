@@ -1,17 +1,19 @@
-import { Form, Input, Button, Typography, notification } from "antd";
+import { Form, Input, Button, Typography, notification, Alert } from "antd";
 import axios from "axios";
 import { SHA3 } from "sha3";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
+import { useContext } from "react";
+import { AuthContext } from "../components/Auth";
 
 const { Title } = Typography;
 
-export const RegistrationForm = () => {
-  const navigate = useNavigate();
+export const LoginForm = () => {
+  const { setLoginStatus } = useContext(AuthContext);
 
   const onFinishFailed = () => {
     notification.error({
-      message: `Registration failed`,
+      message: `Login failed`,
       description: "Please try again",
       placement: "top",
     });
@@ -22,22 +24,21 @@ export const RegistrationForm = () => {
     hash.update(values.password);
 
     try {
-      await axios.put("/auth/register", {
+      await axios.post("/auth/login", {
         email: values.email,
-        fullname: values.fullname,
         passwordHash: hash.digest("hex"),
       });
 
       notification.success({
-        message: `Registration successfull`,
-        description: "Taking you back to login page",
+        message: `Login successfull`,
+        description: "Taking you to the todo app",
         placement: "top",
       });
 
-      navigate("/");
+      setLoginStatus(true);
     } catch (error: any) {
       notification.error({
-        message: `Registration failed`,
+        message: `Login failed`,
         description: `${error?.response?.data?.message}. Please try again.`,
         placement: "top",
       });
@@ -60,7 +61,7 @@ export const RegistrationForm = () => {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Title level={4}>Please register yourself to use this app</Title>
+      <Title level={4}>Please log in to use todo app</Title>
       <br />
       <Form.Item
         name={"email"}
@@ -70,19 +71,6 @@ export const RegistrationForm = () => {
           {
             required: true,
             message: "Please input a valid email!",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Full Name"
-        name="fullname"
-        rules={[
-          {
-            required: true,
-            message: "Please input your full name!",
           },
         ]}
       >
@@ -112,9 +100,20 @@ export const RegistrationForm = () => {
         }}
       >
         <Button type="primary" htmlType="submit">
-          Register
+          Log in
         </Button>
       </Form.Item>
+
+      <Alert
+        message={
+          <>
+            Don't have an account? Please register{" "}
+            <Link to="/register">here</Link>.
+          </>
+        }
+        type="info"
+        showIcon
+      />
     </Form>
   );
 };
