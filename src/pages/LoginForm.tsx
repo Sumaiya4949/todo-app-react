@@ -33,7 +33,10 @@ export const LoginForm = () => {
         message: `Login successfull`,
         description: "Taking you to the todo app",
         placement: "top",
+        duration: 1,
       });
+
+      localStorage.removeItem("isLoggedIn");
 
       setLoginStatus(true);
     } catch (error: any) {

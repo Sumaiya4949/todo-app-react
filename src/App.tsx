@@ -1,4 +1,4 @@
-import { Layout, Typography, Image } from "antd";
+import { Layout, Typography, Image, notification } from "antd";
 import "antd/dist/antd.css";
 import { useContext } from "react";
 import { Route, Routes, Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
+import axios from "axios";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -17,7 +18,28 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setLoginStatus } = useContext(AuthContext);
+
+  const logout = async () => {
+    try {
+      await axios.post("/auth/logout");
+
+      notification.success({
+        message: `Logout successfull`,
+        description: "Taking you to the login page",
+        placement: "top",
+      });
+
+      setLoginStatus(false);
+    } catch (error) {
+      notification.error({
+        message: `Logout failed`,
+        description: `Please try again.`,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  };
 
   //JSX
   return (
@@ -30,7 +52,7 @@ const App = () => {
         {isLoggedIn && (
           <AuthUserBadge
             className={styles.authUserBadge}
-            logout={() => {}}
+            logout={logout}
             userName={"Sumaiya Sultana"}
           />
         )}
