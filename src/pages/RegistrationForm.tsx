@@ -1,10 +1,13 @@
 import { Form, Input, Button, Typography, notification } from "antd";
 import axios from "axios";
 import { SHA3 } from "sha3";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 export const RegistrationForm = () => {
+  const navigate = useNavigate();
+
   const onFinishFailed = () => {
     notification.error({
       message: `Registration failed`,
@@ -18,19 +21,19 @@ export const RegistrationForm = () => {
     hash.update(values.password);
 
     try {
-      const { data } = await axios.put("/auth/register", {
+      await axios.put("/auth/register", {
         email: values.email,
         fullname: values.fullname,
         passwordHash: hash.digest("hex"),
       });
 
-      if (data.success) {
-        notification.success({
-          message: `Registration successfull`,
-          description: "Taking you back to login page",
-          placement: "top",
-        });
-      }
+      notification.success({
+        message: `Registration successfull`,
+        description: "Taking you back to login page",
+        placement: "top",
+      });
+
+      navigate("/");
     } catch (error: any) {
       notification.error({
         message: `Registration failed`,
