@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { User } from "../types";
+import axios from "axios";
 
 type AuthInfo = {
   isLoggedIn: boolean;
@@ -23,6 +24,7 @@ export const Auth = (props: PropType) => {
   const initialLoginState = localStorage.getItem("isLoggedIn") === "true";
 
   const initialAuthUserStateStr = localStorage.getItem("authUser");
+
   const initialAuthUserState =
     initialAuthUserStateStr && initialAuthUserStateStr !== "null"
       ? JSON.parse(initialAuthUserStateStr)
@@ -37,6 +39,20 @@ export const Auth = (props: PropType) => {
     localStorage.setItem("isLoggedIn", status.toString());
     localStorage.setItem("authUser", JSON.stringify(user));
   };
+
+  useEffect(() => {
+    const fethInitialAuthUserFromDb = async () => {
+      try {
+        let response = await axios.get("/auth/who-am-i");
+        let { data } = response;
+        let { user } = data;
+        setLoginStatus(true, user);
+      } catch (error: any) {
+        setLoginStatus(false, null);
+      }
+    };
+    fethInitialAuthUserFromDb();
+  }, []);
 
   return (
     <AuthContext.Provider
