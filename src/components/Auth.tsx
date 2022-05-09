@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { User } from "../types";
 import axios from "axios";
-import { notification } from "antd";
 
 type AuthInfo = {
   isLoggedIn: boolean;
@@ -45,7 +44,7 @@ export const Auth = (props: PropType) => {
     const fethInitialAuthUserFromDb = async () => {
       try {
         let response = await axios.get("/auth/who-am-i");
-        let data = response.data;
+        let { data } = response;
         let { user } = data;
         setLoginStatus(true, user);
       } catch (error: any) {
