@@ -17,11 +17,9 @@ export const useTodoList = () => {
    * @param {TodoType} todo todo which should be added
    */
 
-  const addNewTodo = useCallback(async (todoItem: TodoType) => {
+  const addNewTodo = useCallback(async (title: string) => {
     try {
-      const { data } = await axios.put("/api/add-todo", {
-        title: todoItem.title,
-      });
+      const { data } = await axios.put("/api/add-todo", { title });
 
       const { todo } = data;
 
