@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TodoType } from "../types";
+import axios from "axios";
+import { notification } from "antd";
 
 /**
  * React custom hook to management of todo list
@@ -14,10 +16,27 @@ export const useTodoList = () => {
    *  - Saves the new todo in the state.
    * @param {TodoType} todo todo which should be added
    */
-  const addNewTodo = useCallback((todo: TodoType): void => {
-    setMyTodos((prev) => {
-      return [...prev, todo];
-    });
+
+  const addNewTodo = useCallback(async (title: string) => {
+    try {
+      const { data } = await axios.put("/api/add-todo", { title });
+      const { todo } = data;
+
+      setMyTodos((prev) => {
+        return [...prev, todo];
+      });
+
+      notification.success({
+        message: "Todo added successfully",
+        duration: 1,
+        placement: "top",
+      });
+    } catch (error) {
+      notification.error({
+        message: `Failed to add todo`,
+        placement: "top",
+      });
+    }
   }, []);
 
   /**
@@ -28,7 +47,7 @@ export const useTodoList = () => {
    */
   const removeTodoById = useCallback((id: string): void => {
     setMyTodos((prev) => {
-      return prev.filter((todo) => todo.id != id);
+      return prev.filter((todo) => todo.id !== id);
     });
   }, []);
 
@@ -48,6 +67,23 @@ export const useTodoList = () => {
         return { ...todo, isDone };
       });
     });
+  }, []);
+
+  useEffect(() => {
+    const fetchInitialTodosFromDb = async () => {
+      try {
+        let response = await axios.get("/api/all-todos");
+        let { data } = response;
+        let { todos } = data;
+        setMyTodos(todos);
+      } catch (error) {
+        notification.error({
+          message: `Failed to get todos from server`,
+          placement: "top",
+        });
+      }
+    };
+    fetchInitialTodosFromDb();
   }, []);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };

@@ -1,12 +1,10 @@
-import { TodoType } from "../types";
 import { Form, Input, Button } from "antd";
 import styles from "../styles/TodoAddForm.module.scss";
-import { v4 as makeId } from "uuid";
 import { useCallback } from "react";
 import { PlusSquareOutlined } from "@ant-design/icons";
 
 type PropType = {
-  addTodo: (todo: TodoType) => void;
+  addTodo: (title: string) => void;
   className?: string;
 };
 /**
@@ -30,15 +28,10 @@ export const TodoAddForm = (props: PropType) => {
    */
   const onFinish = useCallback(
     (values: any) => {
-      addTodo({
-        isDone: false,
-        id: makeId(),
-        title: values.todoTitle,
-      });
-
+      addTodo(values.todoTitle);
       form.resetFields();
     },
-    [form]
+    [form, addTodo]
   );
 
   //JSX
