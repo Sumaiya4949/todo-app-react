@@ -7,20 +7,20 @@ import { TodoType } from "../types";
  */
 export const useTodoList = () => {
   // Load todos from local storage
-  const initialTodos: TodoType[] = useMemo(() => {
-    return JSON.parse(localStorage.getItem("todos") || "[]");
-  }, []);
+  // const initialTodos: TodoType[] = useMemo(() => {
+  //   return JSON.parse(localStorage.getItem("todos") || "[]");
+  // }, []);
 
-  const [myTodos, setMyTodos] = useState<TodoType[]>(initialTodos);
+  const [myTodos, setMyTodos] = useState<TodoType[]>([]);
 
   /**
    * Effect to save todos to local storage when todos change
    * @description
    *  - Saves the todos to local storage as JSON string.
    */
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(myTodos));
-  }, [myTodos]);
+  // useEffect(() => {
+  //   localStorage.setItem("todos", JSON.stringify(myTodos));
+  // }, [myTodos]);
 
   /**
    * Add new todo to the todo list
