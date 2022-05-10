@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { TodoType } from "../types";
 import axios from "axios";
+import { notification } from "antd";
 
 /**
  * React custom hook to management of todo list
@@ -21,12 +22,23 @@ export const useTodoList = () => {
       const { data } = await axios.put("/api/add-todo", {
         title: todoItem.title,
       });
+
       const { todo } = data;
+
       setMyTodos((prev) => {
         return [...prev, todo];
       });
+
+      notification.success({
+        message: "Todo added successfully",
+        duration: 1,
+        placement: "top",
+      });
     } catch (error) {
-      console.log(error);
+      notification.error({
+        message: `Failed to add todo`,
+        placement: "top",
+      });
     }
   }, []);
 
@@ -69,7 +81,10 @@ export const useTodoList = () => {
 
         setMyTodos(todos);
       } catch (error) {
-        console.log(error);
+        notification.error({
+          message: `Failed to get todos from server`,
+          placement: "top",
+        });
       }
     };
     fetchInitialTodosFromDb();
