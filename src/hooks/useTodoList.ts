@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TodoType } from "../types";
 import axios from "axios";
-import { async } from "@firebase/util";
 
 /**
  * React custom hook to management of todo list
@@ -39,7 +38,7 @@ export const useTodoList = () => {
    */
   const removeTodoById = useCallback((id: string): void => {
     setMyTodos((prev) => {
-      return prev.filter((todo) => todo.id != id);
+      return prev.filter((todo) => todo.id !== id);
     });
   }, []);
 

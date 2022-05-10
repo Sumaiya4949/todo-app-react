@@ -38,7 +38,7 @@ export const TodoAddForm = (props: PropType) => {
 
       form.resetFields();
     },
-    [form]
+    [form, addTodo]
   );
 
   //JSX
