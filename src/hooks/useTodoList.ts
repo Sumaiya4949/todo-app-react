@@ -20,7 +20,6 @@ export const useTodoList = () => {
   const addNewTodo = useCallback(async (title: string) => {
     try {
       const { data } = await axios.put("/api/add-todo", { title });
-
       const { todo } = data;
 
       setMyTodos((prev) => {
@@ -76,7 +75,6 @@ export const useTodoList = () => {
         let response = await axios.get("/api/all-todos");
         let { data } = response;
         let { todos } = data;
-
         setMyTodos(todos);
       } catch (error) {
         notification.error({
