@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TodoType } from "../types";
+import axios from "axios";
+import { async } from "@firebase/util";
 
 /**
  * React custom hook to management of todo list
@@ -14,10 +16,19 @@ export const useTodoList = () => {
    *  - Saves the new todo in the state.
    * @param {TodoType} todo todo which should be added
    */
-  const addNewTodo = useCallback((todo: TodoType): void => {
-    setMyTodos((prev) => {
-      return [...prev, todo];
-    });
+
+  const addNewTodo = useCallback(async (todoItem: TodoType) => {
+    try {
+      const { data } = await axios.put("/api/add-todo", {
+        title: todoItem.title,
+      });
+      const { todo } = data;
+      setMyTodos((prev) => {
+        return [...prev, todo];
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   /**
@@ -48,6 +59,21 @@ export const useTodoList = () => {
         return { ...todo, isDone };
       });
     });
+  }, []);
+
+  useEffect(() => {
+    const fetchInitialTodosFromDb = async () => {
+      try {
+        let response = await axios.get("/api/all-todos");
+        let { data } = response;
+        let { todos } = data;
+
+        setMyTodos(todos);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchInitialTodosFromDb();
   }, []);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
