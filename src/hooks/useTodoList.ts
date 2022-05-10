@@ -6,21 +6,7 @@ import { TodoType } from "../types";
  * @returns {object} Todo list and some functions to add, remove and check/uncheck funtionality
  */
 export const useTodoList = () => {
-  // Load todos from local storage
-  const initialTodos: TodoType[] = useMemo(() => {
-    return JSON.parse(localStorage.getItem("todos") || "[]");
-  }, []);
-
-  const [myTodos, setMyTodos] = useState<TodoType[]>(initialTodos);
-
-  /**
-   * Effect to save todos to local storage when todos change
-   * @description
-   *  - Saves the todos to local storage as JSON string.
-   */
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(myTodos));
-  }, [myTodos]);
+  const [myTodos, setMyTodos] = useState<TodoType[]>([]);
 
   /**
    * Add new todo to the todo list
