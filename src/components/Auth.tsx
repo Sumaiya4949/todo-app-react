@@ -69,7 +69,7 @@ export const Auth = (props: PropType) => {
     };
 
     fethInitialAuthUserFromDb();
-  }, []);
+  }, [setLoginStatus]);
 
   return (
     <AuthContext.Provider
