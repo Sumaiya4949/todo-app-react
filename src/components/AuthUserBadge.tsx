@@ -7,9 +7,15 @@ type PropType = {
   userName?: string;
 };
 
+/**
+ * React component to visualize logged in user info
+ * @param {PropType} props Props of the component
+ * @returns {JSX} JSX of the component
+ */
 export const AuthUserBadge = (props: PropType) => {
   const { className, logout, userName } = props;
 
+  //JSX
   return (
     <Dropdown.Button
       className={className}

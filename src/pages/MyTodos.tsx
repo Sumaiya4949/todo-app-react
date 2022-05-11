@@ -12,6 +12,7 @@ export const MyTodos = () => {
   const { addNewTodo, myTodos, removeTodoById, changeTodoStatus } =
     useTodoList();
 
+  // JSX
   return (
     <Fragment>
       <TodoAddForm className={styles.todoForm} addTodo={addNewTodo} />

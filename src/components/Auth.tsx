@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { User } from "../types";
 import axios from "axios";
 
@@ -18,6 +18,11 @@ export const AuthContext = createContext<AuthInfo>({
   user: null,
 });
 
+/**
+ * React component to provide authentication context to the child component subtree
+ * @param {PropType} props Props of the component
+ * @returns {JSX} JSX of the auth component
+ */
 export const Auth = (props: PropType) => {
   const { children } = props;
 
@@ -33,13 +38,29 @@ export const Auth = (props: PropType) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialLoginState);
   const [authUser, setAuthUser] = useState<User | null>(initialAuthUserState);
 
-  const setLoginStatus = (status: boolean, user: User | null) => {
+  /**
+   * Set user and user's login status to local storage and state
+   * @description
+   *  - Sets login status to local storage and state
+   *  - Sets user to local storage and state
+   * @param {boolean} status Flag to determine if the user is logged in
+   * @param {User} user Information of currently logged user
+   */
+  const setLoginStatus = useCallback((status: boolean, user: User | null) => {
     setIsLoggedIn(status);
     setAuthUser(user);
     localStorage.setItem("isLoggedIn", status.toString());
     localStorage.setItem("authUser", JSON.stringify(user));
-  };
+  }, []);
 
+  /**
+   * Effect to fetch currently logged in user from server
+   * @description
+   *  - Fetches currently logged in user from server
+   *  - Saves login status and auth user information
+   *  - If error occurs
+   *    - Erase saved auth user information
+   */
   useEffect(() => {
     const fethInitialAuthUserFromDb = async () => {
       try {
@@ -51,9 +72,11 @@ export const Auth = (props: PropType) => {
         setLoginStatus(false, null);
       }
     };
-    fethInitialAuthUserFromDb();
-  }, []);
 
+    fethInitialAuthUserFromDb();
+  }, [setLoginStatus]);
+
+  //JSX
   return (
     <AuthContext.Provider
       value={{ isLoggedIn, setLoginStatus, user: authUser }}

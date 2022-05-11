@@ -3,47 +3,72 @@ import axios from "axios";
 import { SHA3 } from "sha3";
 import { useNavigate } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
+import { useCallback } from "react";
 
 const { Title } = Typography;
 
+/**
+ * React component to visualize registration form
+ * @returns {JSX} JSX of the registration form
+ */
 export const RegistrationForm = () => {
   const navigate = useNavigate();
 
-  const onFinishFailed = () => {
+  /**
+   * Handle if form submission fails
+   * @description
+   *  - Shows an error toast
+   */
+  const onFinishFailed = useCallback(() => {
     notification.error({
       message: `Registration failed`,
       description: "Please try again",
       placement: "top",
     });
-  };
+  }, []);
 
-  const onFinish = async (values: any) => {
-    const hash = new SHA3(512);
-    hash.update(values.password);
+  /**
+   * Handle if form is successfully submitted
+   * @description
+   *  - Calculates password hash value
+   *  - Requests the server for user registration
+   *  - If request is successfull
+   *    - Shows a success message
+   *    - Takes user back to login page
+   *  - If request is failed
+   *    - Shows an error message
+   * @param {any} values Object containing all the form field values by their field name
+   */
+  const onFinish = useCallback(
+    async (values: any) => {
+      const hash = new SHA3(512);
+      hash.update(values.password);
 
-    try {
-      await axios.put("/auth/register", {
-        email: values.email,
-        fullname: values.fullname,
-        passwordHash: hash.digest("hex"),
-      });
+      try {
+        await axios.put("/auth/register", {
+          email: values.email,
+          fullname: values.fullname,
+          passwordHash: hash.digest("hex"),
+        });
 
-      notification.success({
-        message: `Registration successfull`,
-        description: "Taking you back to login page",
-        placement: "top",
-        duration: 1,
-      });
+        notification.success({
+          message: `Registration successfull`,
+          description: "Taking you back to login page",
+          placement: "top",
+          duration: 1,
+        });
 
-      navigate("/");
-    } catch (error: any) {
-      notification.error({
-        message: `Registration failed`,
-        description: `${error?.response?.data?.message}. Please try again.`,
-        placement: "top",
-      });
-    }
-  };
+        navigate("/");
+      } catch (error: any) {
+        notification.error({
+          message: `Registration failed`,
+          description: `${error?.response?.data?.message}. Please try again.`,
+          placement: "top",
+        });
+      }
+    },
+    [navigate]
+  );
 
   return (
     <Form
