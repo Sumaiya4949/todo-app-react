@@ -1,6 +1,6 @@
 import { Layout, Typography, Image, notification, Modal } from "antd";
 import "antd/dist/antd.css";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import { AuthContext } from "./components/Auth";
 import { AuthUserBadge } from "./components/AuthUserBadge";
@@ -21,7 +21,17 @@ const { Title } = Typography;
 const App = () => {
   const { isLoggedIn, setLoginStatus, user } = useContext(AuthContext);
 
-  const logout = () => {
+  /**
+   * Logout after user confirmation
+   * @description
+   *  - Request the server for user logout after user confirmation
+   *  - If request is successfull
+   *    - Shows a success message
+   *    - Erases user information and login status
+   *  - If request is failed
+   *    - Shows an error message
+   */
+  const logout = useCallback(() => {
     Modal.confirm({
       icon: <ExclamationCircleOutlined />,
       content: <Typography.Title level={4}>Are you sure?</Typography.Title>,
@@ -47,7 +57,7 @@ const App = () => {
         }
       },
     });
-  };
+  }, [setLoginStatus]);
 
   //JSX
   return (

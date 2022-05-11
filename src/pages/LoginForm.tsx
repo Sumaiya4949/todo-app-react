@@ -20,13 +20,13 @@ export const LoginForm = () => {
    * @description
    *  - Shows an error toast
    */
-  const onFinishFailed = () => {
+  const onFinishFailed = useCallback(() => {
     notification.error({
       message: `Login failed`,
       description: "Please try again",
       placement: "top",
     });
-  };
+  }, []);
 
   /**
    * Handle if form submission is successfull
@@ -38,6 +38,7 @@ export const LoginForm = () => {
    *    - Saves user information and login status
    *  - If request is failed
    *    - Shows an error message
+   * @param {any} values Object containing all the form field values by their field name
    */
   const onFinish = useCallback(
     async (values: any) => {
