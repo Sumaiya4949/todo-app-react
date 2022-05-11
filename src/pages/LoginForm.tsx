@@ -3,14 +3,23 @@ import axios from "axios";
 import { SHA3 } from "sha3";
 import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { AuthContext } from "../components/Auth";
 
 const { Title } = Typography;
 
+/**
+ * React component to visualize login form
+ * @returns {JSX} JSX of the login form
+ */
 export const LoginForm = () => {
   const { setLoginStatus } = useContext(AuthContext);
 
+  /**
+   * Handle if login fails
+   * @description
+   *  - Shows an error toast
+   */
   const onFinishFailed = () => {
     notification.error({
       message: `Login failed`,
@@ -19,35 +28,50 @@ export const LoginForm = () => {
     });
   };
 
-  const onFinish = async (values: any) => {
-    const hash = new SHA3(512);
-    hash.update(values.password);
+  /**
+   * Handle if form submission is successfull
+   * @description
+   *  - Calculates password hash value
+   *  - Requests the server for user login
+   *  - If request is successfull
+   *    - Shows a success message
+   *    - Saves user information and login status
+   *  - If request is failed
+   *    - Shows an error message
+   */
+  const onFinish = useCallback(
+    async (values: any) => {
+      const hash = new SHA3(512);
+      hash.update(values.password);
 
-    try {
-      const { data } = await axios.post("/auth/login", {
-        email: values.email,
-        passwordHash: hash.digest("hex"),
-      });
+      try {
+        const { data } = await axios.post("/auth/login", {
+          email: values.email,
+          passwordHash: hash.digest("hex"),
+        });
 
-      const { user } = data;
+        const { user } = data;
 
-      notification.success({
-        message: `Login successfull`,
-        description: "Taking you to the todo app",
-        placement: "top",
-        duration: 0.5,
-      });
+        notification.success({
+          message: `Login successfull`,
+          description: "Taking you to the todo app",
+          placement: "top",
+          duration: 0.5,
+        });
 
-      setLoginStatus(true, user);
-    } catch (error: any) {
-      notification.error({
-        message: `Login failed`,
-        description: `${error?.response?.data?.message}. Please try again.`,
-        placement: "top",
-      });
-    }
-  };
+        setLoginStatus(true, user);
+      } catch (error: any) {
+        notification.error({
+          message: `Login failed`,
+          description: `${error?.response?.data?.message}. Please try again.`,
+          placement: "top",
+        });
+      }
+    },
+    [setLoginStatus]
+  );
 
+  //JSX
   return (
     <Form
       name="basic"

@@ -18,6 +18,11 @@ export const AuthContext = createContext<AuthInfo>({
   user: null,
 });
 
+/**
+ * React component to provide authentication context to the child component subtree
+ * @param {PropType} props Props of the component
+ * @returns {JSX} JSX of the auth component
+ */
 export const Auth = (props: PropType) => {
   const { children } = props;
 
@@ -71,6 +76,7 @@ export const Auth = (props: PropType) => {
     fethInitialAuthUserFromDb();
   }, [setLoginStatus]);
 
+  //JSX
   return (
     <AuthContext.Provider
       value={{ isLoggedIn, setLoginStatus, user: authUser }}

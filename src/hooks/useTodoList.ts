@@ -13,10 +13,10 @@ export const useTodoList = () => {
   /**
    * Add new todo to the todo list
    * @description
+   *  - Submits the new todo to the server
    *  - Saves the new todo in the state.
-   * @param {TodoType} todo todo which should be added
+   * @param {string} title todo title which should be added
    */
-
   const addNewTodo = useCallback(async (title: string) => {
     try {
       const { data } = await axios.put("/api/add-todo", { title });
@@ -69,6 +69,14 @@ export const useTodoList = () => {
     });
   }, []);
 
+  /**
+   * Effect to fetch all todo from server
+   * @description
+   *  - Fetchs all todo from the server
+   *  - Sets all todo to the state
+   *  - If error occurs
+   *    - Shows fail notification
+   */
   useEffect(() => {
     const fetchInitialTodosFromDb = async () => {
       try {
