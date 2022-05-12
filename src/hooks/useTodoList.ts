@@ -42,15 +42,26 @@ export const useTodoList = () => {
   }, []);
 
   /**
-   * Remove todo by id from todo list
+   * Remove todo by id from todo list and server
    * @description
-   *  - Removes todo from the state.
+   *  - Removes todo from server and state
+   *  - If fails,
+   *    - Shows an error message
    * @param {string} id Id of the todo which should be removed
    */
-  const removeTodoById = useCallback((id: string): void => {
-    setMyTodos((prev) => {
-      return prev.filter((todo) => todo.id !== id);
-    });
+  const removeTodoById = useCallback(async (id: string) => {
+    try {
+      await axios.delete("/api/delete-todo", { data: { id } });
+
+      setMyTodos((prev) => {
+        return prev.filter((todo) => todo.id !== id);
+      });
+    } catch (error) {
+      notification.error({
+        message: `Failed to remove todo`,
+        placement: "top",
+      });
+    }
   }, []);
 
   /**
