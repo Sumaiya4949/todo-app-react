@@ -4,6 +4,7 @@ import { SHA3 } from "sha3";
 import { useNavigate } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
 import { useCallback } from "react";
+import { API_VERSION } from "../utils/constants";
 
 const { Title } = Typography;
 
@@ -45,7 +46,7 @@ export const RegistrationForm = () => {
       hash.update(values.password);
 
       try {
-        await axios.put("/auth/register", {
+        await axios.put(`/auth/v${API_VERSION}/register`, {
           email: values.email,
           fullname: values.fullname,
           passwordHash: hash.digest("hex"),

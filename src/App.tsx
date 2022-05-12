@@ -10,6 +10,7 @@ import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
 import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { API_VERSION } from "./utils/constants";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -37,7 +38,7 @@ const App = () => {
       content: <Typography.Title level={4}>Are you sure?</Typography.Title>,
       async onOk() {
         try {
-          await axios.post("/auth/logout");
+          await axios.post(`/auth/v${API_VERSION}/logout`);
 
           notification.success({
             message: `Logout successfull`,
