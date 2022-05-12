@@ -2,6 +2,7 @@ export type TodoType = {
   isDone: boolean;
   title: string;
   id: string;
+  creationTime: number;
 };
 
 export type TodoRemover = (id: string) => void;
