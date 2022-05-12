@@ -56,7 +56,7 @@ export const useTodoList = () => {
   /**
    * Change checked status of this todo by id
    * @description
-   *  - Sends this todo status in server
+   *  - Sends the todo status in server
    *  - Saves the checked or unchecked todo in the state.
    *  - If fails,
    *    - Shows an error message
