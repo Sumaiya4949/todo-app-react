@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { User } from "../types";
 import axios from "axios";
+import { API_VERSION } from "../utils/constants";
 
 type AuthInfo = {
   isLoggedIn: boolean;
@@ -64,7 +65,7 @@ export const Auth = (props: PropType) => {
   useEffect(() => {
     const fethInitialAuthUserFromDb = async () => {
       try {
-        let response = await axios.get("/auth/who-am-i");
+        let response = await axios.get(`/auth/v${API_VERSION}/who-am-i`);
         let { data } = response;
         let { user } = data;
         setLoginStatus(true, user);

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "../components/Auth";
+import { API_VERSION } from "../utils/constants";
 
 const { Title } = Typography;
 
@@ -46,7 +47,7 @@ export const LoginForm = () => {
       hash.update(values.password);
 
       try {
-        const { data } = await axios.post("/auth/login", {
+        const { data } = await axios.post(`/auth/v${API_VERSION}/login`, {
           email: values.email,
           passwordHash: hash.digest("hex"),
         });

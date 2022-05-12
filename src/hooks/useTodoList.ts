@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { TodoType } from "../types";
 import axios from "axios";
 import { notification } from "antd";
+import { API_VERSION } from "../utils/constants";
 
 /**
  * React custom hook to management of todo list
@@ -23,7 +24,9 @@ export const useTodoList = () => {
    */
   const addNewTodo = useCallback(async (title: string) => {
     try {
-      const { data } = await axios.put("/api/add-todo", { title });
+      const { data } = await axios.put(`/api/v${API_VERSION}/add-todo`, {
+        title,
+      });
       const { todo } = data;
 
       setMyTodos((prev) => {
@@ -53,7 +56,7 @@ export const useTodoList = () => {
    */
   const removeTodoById = useCallback(async (id: string) => {
     try {
-      await axios.delete("/api/delete-todo", { data: { id } });
+      await axios.delete(`/api/v${API_VERSION}/delete-todo`, { data: { id } });
 
       setMyTodos((prev) => {
         return prev.filter((todo) => todo.id !== id);
@@ -84,7 +87,10 @@ export const useTodoList = () => {
    */
   const changeTodoStatus = useCallback(async (id: string, isDone: boolean) => {
     try {
-      const { data } = await axios.post("/api/check-todo", { id, isDone });
+      const { data } = await axios.post(`/api/v${API_VERSION}/check-todo`, {
+        id,
+        isDone,
+      });
       const { todo: changedTodo } = data;
 
       setMyTodos((prev) => {
@@ -113,7 +119,7 @@ export const useTodoList = () => {
   useEffect(() => {
     const fetchInitialTodosFromDb = async () => {
       try {
-        let response = await axios.get("/api/all-todos");
+        let response = await axios.get(`/api/v${API_VERSION}/all-todos`);
         let { data } = response;
         let { todos } = data;
         setMyTodos(todos);
