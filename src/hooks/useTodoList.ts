@@ -16,7 +16,7 @@ export const useTodoList = () => {
    *  - Submits the new todo to the server
    *  - Saves the new todo in the state
    *  - If success,
-   *    - Shows a message
+   *    - Shows a success message
    *  - If fails,
    *    - Shows an error message
    * @param {string} title todo title which should be added
@@ -106,7 +106,7 @@ export const useTodoList = () => {
    *  - Fetchs all todo from the server
    *  - Sets all todo to the state
    *  - If success,
-   *    - Shows a message
+   *    - Shows a success message
    *  - If error occurs
    *    - Shows fail notification
    */
