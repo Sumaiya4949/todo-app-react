@@ -15,6 +15,8 @@ export const useTodoList = () => {
    * @description
    *  - Submits the new todo to the server
    *  - Saves the new todo in the state.
+   * - If fails,
+   *    - Shows an error message
    * @param {string} title todo title which should be added
    */
   const addNewTodo = useCallback(async (title: string) => {
@@ -54,19 +56,29 @@ export const useTodoList = () => {
   /**
    * Change checked status of this todo by id
    * @description
-   *  - Checks or unchecks todo from state.
+   *  - Sends this todo status in server
+   *  - Saves the checked or unchecked todo in the state.
+   *  - If fails,
+   *    - Shows an error message
    * @param {string} id Id of the todo which should be checked or unchecked
    * @param {boolean} isDone Flag to determine if the todo should be checked or unchecked
    */
-  const changeTodoStatus = useCallback((id: string, isDone: boolean): void => {
-    setMyTodos((prev) => {
-      return prev.map((todo) => {
-        if (todo.id !== id) {
-          return todo;
-        }
-        return { ...todo, isDone };
+  const changeTodoStatus = useCallback(async (id: string, isDone: boolean) => {
+    try {
+      const { data } = await axios.post("/api/check-todo", { id, isDone });
+      const { todo: changedTodo } = data;
+
+      setMyTodos((prev) => {
+        return prev.map((item) =>
+          item.id === changedTodo.id ? changedTodo : item
+        );
       });
-    });
+    } catch (error) {
+      notification.error({
+        message: `Failed to update todo status`,
+        placement: "top",
+      });
+    }
   }, []);
 
   /**
