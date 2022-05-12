@@ -11,6 +11,10 @@ import { API_VERSION } from "../utils/constants";
 export const useTodoList = () => {
   const [myTodos, setMyTodos] = useState<TodoType[]>([]);
 
+  const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
+    return todoA.creationTime < todoB.creationTime ? -1 : 1;
+  }, []);
+
   /**
    * Add new todo to the todo list
    * @description
@@ -22,29 +26,32 @@ export const useTodoList = () => {
    *    - Shows an error message
    * @param {string} title todo title which should be added
    */
-  const addNewTodo = useCallback(async (title: string) => {
-    try {
-      const { data } = await axios.put(`/api/v${API_VERSION}/add-todo`, {
-        title,
-      });
-      const { todo } = data;
+  const addNewTodo = useCallback(
+    async (title: string) => {
+      try {
+        const { data } = await axios.put(`/api/v${API_VERSION}/add-todo`, {
+          title,
+        });
+        const { todo } = data;
 
-      setMyTodos((prev) => {
-        return [...prev, todo];
-      });
+        setMyTodos((prev) => {
+          return [...prev, todo].sort(compareTodo);
+        });
 
-      notification.success({
-        message: "Todo added successfully",
-        duration: 1,
-        placement: "top",
-      });
-    } catch (error) {
-      notification.error({
-        message: `Failed to add todo`,
-        placement: "top",
-      });
-    }
-  }, []);
+        notification.success({
+          message: "Todo added successfully",
+          duration: 1,
+          placement: "top",
+        });
+      } catch (error) {
+        notification.error({
+          message: `Failed to add todo`,
+          placement: "top",
+        });
+      }
+    },
+    [compareTodo]
+  );
 
   /**
    * Remove todo by id from todo list
@@ -54,26 +61,31 @@ export const useTodoList = () => {
    *    - Shows an error message
    * @param {string} id Id of the todo which should be removed
    */
-  const removeTodoById = useCallback(async (id: string) => {
-    try {
-      await axios.delete(`/api/v${API_VERSION}/delete-todo`, { data: { id } });
+  const removeTodoById = useCallback(
+    async (id: string) => {
+      try {
+        await axios.delete(`/api/v${API_VERSION}/delete-todo`, {
+          data: { id },
+        });
 
-      setMyTodos((prev) => {
-        return prev.filter((todo) => todo.id !== id);
-      });
+        setMyTodos((prev) => {
+          return prev.filter((todo) => todo.id !== id).sort(compareTodo);
+        });
 
-      notification.success({
-        message: "Todo deleted successfully",
-        duration: 1,
-        placement: "top",
-      });
-    } catch (error) {
-      notification.error({
-        message: `Failed to remove todo`,
-        placement: "top",
-      });
-    }
-  }, []);
+        notification.success({
+          message: "Todo deleted successfully",
+          duration: 1,
+          placement: "top",
+        });
+      } catch (error) {
+        notification.error({
+          message: `Failed to remove todo`,
+          placement: "top",
+        });
+      }
+    },
+    [compareTodo]
+  );
 
   /**
    * Change checked status of this todo by id
@@ -85,26 +97,29 @@ export const useTodoList = () => {
    * @param {string} id Id of the todo which should be checked or unchecked
    * @param {boolean} isDone Flag to determine if the todo should be checked or unchecked
    */
-  const changeTodoStatus = useCallback(async (id: string, isDone: boolean) => {
-    try {
-      const { data } = await axios.post(`/api/v${API_VERSION}/check-todo`, {
-        id,
-        isDone,
-      });
-      const { todo: changedTodo } = data;
+  const changeTodoStatus = useCallback(
+    async (id: string, isDone: boolean) => {
+      try {
+        const { data } = await axios.post(`/api/v${API_VERSION}/check-todo`, {
+          id,
+          isDone,
+        });
+        const { todo: changedTodo } = data;
 
-      setMyTodos((prev) => {
-        return prev.map((item) =>
-          item.id === changedTodo.id ? changedTodo : item
-        );
-      });
-    } catch (error) {
-      notification.error({
-        message: `Failed to update todo status`,
-        placement: "top",
-      });
-    }
-  }, []);
+        setMyTodos((prev) => {
+          return prev
+            .map((item) => (item.id === changedTodo.id ? changedTodo : item))
+            .sort(compareTodo);
+        });
+      } catch (error) {
+        notification.error({
+          message: `Failed to update todo status`,
+          placement: "top",
+        });
+      }
+    },
+    [compareTodo]
+  );
 
   /**
    * Effect to fetch all todo from server
@@ -122,7 +137,7 @@ export const useTodoList = () => {
         let response = await axios.get(`/api/v${API_VERSION}/all-todos`);
         let { data } = response;
         let { todos } = data;
-        setMyTodos(todos);
+        setMyTodos(todos.sort(compareTodo));
       } catch (error) {
         notification.error({
           message: `Failed to get todos from server`,
@@ -130,8 +145,9 @@ export const useTodoList = () => {
         });
       }
     };
+
     fetchInitialTodosFromDb();
-  }, []);
+  }, [compareTodo]);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
 };
