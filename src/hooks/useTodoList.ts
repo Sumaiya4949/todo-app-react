@@ -14,8 +14,10 @@ export const useTodoList = () => {
    * Add new todo to the todo list
    * @description
    *  - Submits the new todo to the server
-   *  - Saves the new todo in the state.
-   * - If fails,
+   *  - Saves the new todo in the state
+   *  - If success,
+   *    - Shows a success message
+   *  - If fails,
    *    - Shows an error message
    * @param {string} title todo title which should be added
    */
@@ -44,13 +46,30 @@ export const useTodoList = () => {
   /**
    * Remove todo by id from todo list
    * @description
-   *  - Removes todo from the state.
+   *  - Removes todo from server and state
+   *  - If fails,
+   *    - Shows an error message
    * @param {string} id Id of the todo which should be removed
    */
-  const removeTodoById = useCallback((id: string): void => {
-    setMyTodos((prev) => {
-      return prev.filter((todo) => todo.id !== id);
-    });
+  const removeTodoById = useCallback(async (id: string) => {
+    try {
+      await axios.delete("/api/delete-todo", { data: { id } });
+
+      setMyTodos((prev) => {
+        return prev.filter((todo) => todo.id !== id);
+      });
+
+      notification.success({
+        message: "Todo deleted successfully",
+        duration: 1,
+        placement: "top",
+      });
+    } catch (error) {
+      notification.error({
+        message: `Failed to remove todo`,
+        placement: "top",
+      });
+    }
   }, []);
 
   /**
@@ -86,6 +105,8 @@ export const useTodoList = () => {
    * @description
    *  - Fetchs all todo from the server
    *  - Sets all todo to the state
+   *  - If success,
+   *    - Shows a success message
    *  - If error occurs
    *    - Shows fail notification
    */
