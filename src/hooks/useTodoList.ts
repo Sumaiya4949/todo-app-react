@@ -42,7 +42,7 @@ export const useTodoList = () => {
   }, []);
 
   /**
-   * Remove todo by id from todo list and server
+   * Remove todo by id from todo list
    * @description
    *  - Removes todo from server and state
    *  - If fails,
@@ -55,6 +55,12 @@ export const useTodoList = () => {
 
       setMyTodos((prev) => {
         return prev.filter((todo) => todo.id !== id);
+      });
+
+      notification.success({
+        message: "Todo deleted successfully",
+        duration: 1,
+        placement: "top",
       });
     } catch (error) {
       notification.error({
