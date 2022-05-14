@@ -5,7 +5,11 @@ import { notification } from "antd";
 import { API_VERSION } from "../utils/constants";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { myTodosVar } from "../utils/cache";
-import { MUTATION_ADD_TODO, QUERY_MY_TODOS } from "../utils/queries";
+import {
+  MUTATION_ADD_TODO,
+  MUTATION_DELETE_TODO,
+  QUERY_MY_TODOS,
+} from "../utils/queries";
 
 /**
  * React custom hook to management of todo list
@@ -19,6 +23,8 @@ export const useTodoList = () => {
 
   const [addTodoMutation, { data: newTodoData, error: newTodoDataError }] =
     useMutation(MUTATION_ADD_TODO);
+
+  const [deleteTodoMutation] = useMutation(MUTATION_DELETE_TODO);
 
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
     return todoA.creationTime < todoB.creationTime ? -1 : 1;
@@ -57,8 +63,10 @@ export const useTodoList = () => {
   const removeTodoById = useCallback(
     async (id: string) => {
       try {
-        await axios.delete(`/api/v${API_VERSION}/delete-todo`, {
-          data: { id },
+        await deleteTodoMutation({
+          variables: {
+            id,
+          },
         });
 
         myTodosVar(
@@ -79,7 +87,7 @@ export const useTodoList = () => {
         });
       }
     },
-    [compareTodo]
+    [deleteTodoMutation]
   );
 
   /**
