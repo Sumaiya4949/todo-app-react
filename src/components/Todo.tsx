@@ -36,7 +36,7 @@ export const Todo = (props: PropType) => {
     if (result) {
       removeTodoById(todo.id);
     }
-  }, [todo.title, todo.id]);
+  }, [todo.title, todo.id, removeTodoById]);
 
   /**
    * Change the status of this todo
@@ -47,7 +47,7 @@ export const Todo = (props: PropType) => {
     (event: CheckboxChangeEvent) => {
       changeTodoStatus(todo.id, event.target.checked);
     },
-    [todo.id]
+    [todo.id, changeTodoStatus]
   );
 
   // JSX

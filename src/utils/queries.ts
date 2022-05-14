@@ -46,3 +46,14 @@ export const QUERY_MY_TODOS = gql`
     }
   }
 `;
+
+export const MUTATION_ADD_TODO = gql`
+  mutation AddTodo($title: String!) {
+    todo: addTodo(title: $title) {
+      id
+      title
+      isDone
+      creationTime
+    }
+  }
+`;

@@ -3,9 +3,9 @@ import { TodoType } from "../types";
 import axios from "axios";
 import { notification } from "antd";
 import { API_VERSION } from "../utils/constants";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { myTodosVar } from "../utils/cache";
-import { QUERY_MY_TODOS } from "../utils/queries";
+import { MUTATION_ADD_TODO, QUERY_MY_TODOS } from "../utils/queries";
 
 /**
  * React custom hook to management of todo list
@@ -16,6 +16,9 @@ export const useTodoList = () => {
 
   const { data: myTodosData, error: myTodosDataError } =
     useQuery(QUERY_MY_TODOS);
+
+  const [addTodoMutation, { data: newTodoData, error: newTodoDataError }] =
+    useMutation(MUTATION_ADD_TODO);
 
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
     return todoA.creationTime < todoB.creationTime ? -1 : 1;
@@ -33,28 +36,14 @@ export const useTodoList = () => {
    * @param {string} title todo title which should be added
    */
   const addNewTodo = useCallback(
-    async (title: string) => {
-      try {
-        const { data } = await axios.put(`/api/v${API_VERSION}/add-todo`, {
+    (title: string) => {
+      addTodoMutation({
+        variables: {
           title,
-        });
-        const { todo } = data;
-
-        myTodosVar([...myTodosVar(), todo].sort(compareTodo));
-
-        notification.success({
-          message: "Todo added successfully",
-          duration: 1,
-          placement: "top",
-        });
-      } catch (error) {
-        notification.error({
-          message: `Failed to add todo`,
-          placement: "top",
-        });
-      }
+        },
+      });
     },
-    [compareTodo]
+    [addTodoMutation]
   );
 
   /**
@@ -153,6 +142,29 @@ export const useTodoList = () => {
       });
     }
   }, [myTodosDataError]);
+
+  useEffect(() => {
+    if (newTodoData) {
+      const { todo } = newTodoData;
+
+      myTodosVar([...myTodosVar(), todo].sort(compareTodo));
+
+      notification.success({
+        message: "Todo added successfully",
+        duration: 1,
+        placement: "top",
+      });
+    }
+  }, [newTodoData, compareTodo]);
+
+  useEffect(() => {
+    if (newTodoDataError) {
+      notification.error({
+        message: `Failed to add todo`,
+        placement: "top",
+      });
+    }
+  }, [newTodoDataError]);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
 };
