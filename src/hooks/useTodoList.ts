@@ -3,8 +3,9 @@ import { TodoType } from "../types";
 import axios from "axios";
 import { notification } from "antd";
 import { API_VERSION } from "../utils/constants";
-import { useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { myTodosVar } from "../utils/cache";
+import { QUERY_MY_TODOS } from "../utils/queries";
 
 /**
  * React custom hook to management of todo list
@@ -12,6 +13,9 @@ import { myTodosVar } from "../utils/cache";
  */
 export const useTodoList = () => {
   const myTodos = useReactiveVar(myTodosVar);
+
+  const { data: myTodosData, error: myTodosDataError } =
+    useQuery(QUERY_MY_TODOS);
 
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
     return todoA.creationTime < todoB.creationTime ? -1 : 1;
@@ -135,22 +139,20 @@ export const useTodoList = () => {
    *    - Shows fail notification
    */
   useEffect(() => {
-    const fetchInitialTodosFromDb = async () => {
-      try {
-        let response = await axios.get(`/api/v${API_VERSION}/all-todos`);
-        let { data } = response;
-        let { todos } = data;
-        myTodosVar(todos.sort(compareTodo));
-      } catch (error) {
-        notification.error({
-          message: `Failed to get todos from server`,
-          placement: "top",
-        });
-      }
-    };
+    if (myTodosData) {
+      const initialTodos = myTodosData?.me?.todos.slice();
+      myTodosVar(initialTodos.sort(compareTodo));
+    }
+  }, [compareTodo, myTodosData]);
 
-    fetchInitialTodosFromDb();
-  }, [compareTodo]);
+  useEffect(() => {
+    if (myTodosDataError) {
+      notification.error({
+        message: `Failed to get todos from server`,
+        placement: "top",
+      });
+    }
+  }, [myTodosDataError]);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
 };

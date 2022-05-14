@@ -33,3 +33,16 @@ export const MUTATION_REGISTER = gql`
     register(email: $email, passwordHash: $passwordHash, fullname: $fullname)
   }
 `;
+
+export const QUERY_MY_TODOS = gql`
+  query MyTodos {
+    me {
+      todos {
+        id
+        title
+        isDone
+        creationTime
+      }
+    }
+  }
+`;
