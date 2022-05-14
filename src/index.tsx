@@ -4,17 +4,12 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { initializeApp } from "firebase/app";
 import { BrowserRouter } from "react-router-dom";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const apolloClient = new ApolloClient({
-  uri: "http://localhost:4000",
+  uri: "http://localhost:3000",
   cache: new InMemoryCache(),
+  credentials: "include",
 });
 
 // Your web app's Firebase configuration
