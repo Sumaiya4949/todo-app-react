@@ -115,7 +115,11 @@ export const useTodoList = () => {
 
         myTodosVar(
           myTodosVar()
-            .map((item) => (item.id === todo.id ? todo : item))
+            .map((item) =>
+              item.id === todo.id
+                ? { ...todo, creationTime: +todo.creationTime }
+                : item
+            )
             .sort(compareTodo)
         );
       } catch (error) {
@@ -140,7 +144,13 @@ export const useTodoList = () => {
    */
   useEffect(() => {
     if (myTodosData) {
-      const initialTodos = myTodosData?.me?.todos.slice();
+      const initialTodos = myTodosData?.me?.todos
+        .slice()
+        .map((item: TodoType) => ({
+          ...item,
+          creationTime: +item.creationTime,
+        }));
+
       myTodosVar(initialTodos.sort(compareTodo));
     }
   }, [compareTodo, myTodosData]);
@@ -158,7 +168,11 @@ export const useTodoList = () => {
     if (newTodoData) {
       const { todo } = newTodoData;
 
-      myTodosVar([...myTodosVar(), todo].sort(compareTodo));
+      myTodosVar(
+        [...myTodosVar(), { ...todo, creationTime: +todo.creationTime }].sort(
+          compareTodo
+        )
+      );
 
       notification.success({
         message: "Todo added successfully",
