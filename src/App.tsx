@@ -1,8 +1,7 @@
 import { Layout, Typography, Image, notification, Modal } from "antd";
 import "antd/dist/antd.css";
-import { useCallback, useContext } from "react";
+import { useCallback, useEffect } from "react";
 import { Route, Routes, Link } from "react-router-dom";
-import { AuthContext } from "./components/Auth";
 import { AuthUserBadge } from "./components/AuthUserBadge";
 import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
@@ -13,6 +12,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { API_VERSION } from "./utils/constants";
 import { useReactiveVar } from "@apollo/client";
 import { authUserVar } from "./utils/cache";
+import { saveAuthDataToLocalStorage } from "./utils/helperFunctions";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -22,8 +22,6 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { setLoginStatus } = useContext(AuthContext);
-
   const { isLoggedIn, user } = useReactiveVar(authUserVar);
 
   /**
@@ -51,7 +49,8 @@ const App = () => {
             duration: 0.5,
           });
 
-          setLoginStatus(false, null);
+          saveAuthDataToLocalStorage(false, null);
+          authUserVar({ isLoggedIn: false, user: null });
         } catch (error) {
           notification.error({
             message: `Logout failed`,
@@ -62,7 +61,33 @@ const App = () => {
         }
       },
     });
-  }, [setLoginStatus]);
+  }, []);
+
+  /**
+   * Effect to fetch currently logged in user from server
+   * @description
+   *  - Fetches currently logged in user from server
+   *  - Saves login status and auth user information
+   *  - If error occurs
+   *    - Erase saved auth user information
+   */
+  useEffect(() => {
+    const fethInitialAuthUserFromDb = async () => {
+      try {
+        let response = await axios.get(`/auth/v${API_VERSION}/who-am-i`);
+        let { data } = response;
+        let { user } = data;
+
+        saveAuthDataToLocalStorage(true, user);
+        authUserVar({ isLoggedIn: true, user });
+      } catch (error: any) {
+        saveAuthDataToLocalStorage(false, null);
+        authUserVar({ isLoggedIn: false, user: null });
+      }
+    };
+
+    fethInitialAuthUserFromDb();
+  }, []);
 
   //JSX
   return (

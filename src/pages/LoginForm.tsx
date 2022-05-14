@@ -3,9 +3,10 @@ import axios from "axios";
 import { SHA3 } from "sha3";
 import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
-import { useCallback, useContext } from "react";
-import { AuthContext } from "../components/Auth";
+import { useCallback } from "react";
 import { API_VERSION } from "../utils/constants";
+import { saveAuthDataToLocalStorage } from "../utils/helperFunctions";
+import { authUserVar } from "../utils/cache";
 
 const { Title } = Typography;
 
@@ -14,8 +15,6 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the login form
  */
 export const LoginForm = () => {
-  const { setLoginStatus } = useContext(AuthContext);
-
   /**
    * Handle if login fails
    * @description
@@ -41,37 +40,35 @@ export const LoginForm = () => {
    *    - Shows an error message
    * @param {any} values Object containing all the form field values by their field name
    */
-  const onFinish = useCallback(
-    async (values: any) => {
-      const hash = new SHA3(512);
-      hash.update(values.password);
+  const onFinish = useCallback(async (values: any) => {
+    const hash = new SHA3(512);
+    hash.update(values.password);
 
-      try {
-        const { data } = await axios.post(`/auth/v${API_VERSION}/login`, {
-          email: values.email,
-          passwordHash: hash.digest("hex"),
-        });
+    try {
+      const { data } = await axios.post(`/auth/v${API_VERSION}/login`, {
+        email: values.email,
+        passwordHash: hash.digest("hex"),
+      });
 
-        const { user } = data;
+      const { user } = data;
 
-        notification.success({
-          message: `Login successfull`,
-          description: "Taking you to the todo app",
-          placement: "top",
-          duration: 0.5,
-        });
+      notification.success({
+        message: `Login successfull`,
+        description: "Taking you to the todo app",
+        placement: "top",
+        duration: 0.5,
+      });
 
-        setLoginStatus(true, user);
-      } catch (error: any) {
-        notification.error({
-          message: `Login failed`,
-          description: `${error?.response?.data?.message}. Please try again.`,
-          placement: "top",
-        });
-      }
-    },
-    [setLoginStatus]
-  );
+      saveAuthDataToLocalStorage(true, user);
+      authUserVar({ isLoggedIn: true, user });
+    } catch (error: any) {
+      notification.error({
+        message: `Login failed`,
+        description: `${error?.response?.data?.message}. Please try again.`,
+        placement: "top",
+      });
+    }
+  }, []);
 
   //JSX
   return (

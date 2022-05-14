@@ -4,7 +4,6 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { initializeApp } from "firebase/app";
 import { BrowserRouter } from "react-router-dom";
-import { Auth } from "./components/Auth";
 import {
   ApolloClient,
   InMemoryCache,
@@ -38,9 +37,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <ApolloProvider client={apolloClient}>
-      <Auth>
-        <App />
-      </Auth>
+      <App />
     </ApolloProvider>
   </BrowserRouter>
 );
