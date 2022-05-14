@@ -51,6 +51,9 @@ const App = () => {
     });
   }, [logoutQuery]);
 
+  /**
+   * Effect to execute when auth user data is available after the query execution
+   */
   useEffect(() => {
     if (myData) {
       const { me } = myData;
@@ -59,6 +62,9 @@ const App = () => {
     }
   }, [myData]);
 
+  /**
+   * Effect to execute when the query execution for auth user data fails
+   */
   useEffect(() => {
     if (myDataError) {
       saveAuthDataToLocalStorage(false, null);
@@ -66,6 +72,9 @@ const App = () => {
     }
   }, [myDataError]);
 
+  /**
+   * Effect to execute when logout query succeeds
+   */
   useEffect(() => {
     if (logoutData) {
       notification.success({
@@ -79,6 +88,9 @@ const App = () => {
     }
   }, [logoutData]);
 
+  /**
+   * Effect to execute when logout query fails
+   */
   useEffect(() => {
     if (logoutError) {
       notification.error({
