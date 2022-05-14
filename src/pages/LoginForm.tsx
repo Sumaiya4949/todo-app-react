@@ -1,11 +1,12 @@
 import { Form, Input, Button, Typography, notification, Alert } from "antd";
-import axios from "axios";
 import { SHA3 } from "sha3";
 import { Link } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
-import { useCallback, useContext } from "react";
-import { AuthContext } from "../components/Auth";
-import { API_VERSION } from "../utils/constants";
+import { useCallback, useEffect } from "react";
+import { saveAuthDataToLocalStorage } from "../utils/helperFunctions";
+import { authUserVar } from "../utils/cache";
+import { useLazyQuery } from "@apollo/client";
+import { QUERY_LOGIN } from "../utils/queries";
 
 const { Title } = Typography;
 
@@ -14,7 +15,7 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the login form
  */
 export const LoginForm = () => {
-  const { setLoginStatus } = useContext(AuthContext);
+  const [queryLogin, { data, error }] = useLazyQuery(QUERY_LOGIN);
 
   /**
    * Handle if login fails
@@ -42,36 +43,45 @@ export const LoginForm = () => {
    * @param {any} values Object containing all the form field values by their field name
    */
   const onFinish = useCallback(
-    async (values: any) => {
+    (values: any) => {
       const hash = new SHA3(512);
       hash.update(values.password);
 
-      try {
-        const { data } = await axios.post(`/auth/v${API_VERSION}/login`, {
+      queryLogin({
+        variables: {
           email: values.email,
           passwordHash: hash.digest("hex"),
-        });
-
-        const { user } = data;
-
-        notification.success({
-          message: `Login successfull`,
-          description: "Taking you to the todo app",
-          placement: "top",
-          duration: 0.5,
-        });
-
-        setLoginStatus(true, user);
-      } catch (error: any) {
-        notification.error({
-          message: `Login failed`,
-          description: `${error?.response?.data?.message}. Please try again.`,
-          placement: "top",
-        });
-      }
+        },
+      });
     },
-    [setLoginStatus]
+    [queryLogin]
   );
+
+  useEffect(() => {
+    if (data) {
+      const { user } = data;
+
+      notification.success({
+        message: `Login successfull`,
+        description: "Taking you to the todo app",
+        placement: "top",
+        duration: 0.5,
+      });
+
+      saveAuthDataToLocalStorage(true, user);
+      authUserVar({ isLoggedIn: true, user });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      notification.error({
+        message: `Login failed`,
+        description: `Please try again.`,
+        placement: "top",
+      });
+    }
+  }, [error]);
 
   //JSX
   return (

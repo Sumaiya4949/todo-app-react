@@ -1,18 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { TodoType } from "../types";
-import axios from "axios";
 import { notification } from "antd";
-import { API_VERSION } from "../utils/constants";
+import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { myTodosVar } from "../utils/cache";
+import {
+  MUTATION_ADD_TODO,
+  MUTATION_CHANGE_TODO_STATUS,
+  MUTATION_DELETE_TODO,
+  QUERY_MY_TODOS,
+} from "../utils/queries";
 
 /**
  * React custom hook to management of todo list
  * @returns {object} Todo list and some functions to add, remove and check/uncheck funtionality
  */
 export const useTodoList = () => {
-  const [myTodos, setMyTodos] = useState<TodoType[]>([]);
+  const myTodos = useReactiveVar(myTodosVar);
+
+  const { data: myTodosData, error: myTodosDataError } =
+    useQuery(QUERY_MY_TODOS);
+
+  const [addTodoMutation, { data: newTodoData, error: newTodoDataError }] =
+    useMutation(MUTATION_ADD_TODO);
+
+  const [deleteTodoMutation] = useMutation(MUTATION_DELETE_TODO);
+
+  const [checkTodoMutation] = useMutation(MUTATION_CHANGE_TODO_STATUS);
 
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
-    return todoA.creationTime < todoB.creationTime ? -1 : 1;
+    return +todoA.creationTime < +todoB.creationTime ? -1 : 1;
   }, []);
 
   /**
@@ -27,30 +43,14 @@ export const useTodoList = () => {
    * @param {string} title todo title which should be added
    */
   const addNewTodo = useCallback(
-    async (title: string) => {
-      try {
-        const { data } = await axios.put(`/api/v${API_VERSION}/add-todo`, {
+    (title: string) => {
+      addTodoMutation({
+        variables: {
           title,
-        });
-        const { todo } = data;
-
-        setMyTodos((prev) => {
-          return [...prev, todo].sort(compareTodo);
-        });
-
-        notification.success({
-          message: "Todo added successfully",
-          duration: 1,
-          placement: "top",
-        });
-      } catch (error) {
-        notification.error({
-          message: `Failed to add todo`,
-          placement: "top",
-        });
-      }
+        },
+      });
     },
-    [compareTodo]
+    [addTodoMutation]
   );
 
   /**
@@ -64,13 +64,17 @@ export const useTodoList = () => {
   const removeTodoById = useCallback(
     async (id: string) => {
       try {
-        await axios.delete(`/api/v${API_VERSION}/delete-todo`, {
-          data: { id },
+        await deleteTodoMutation({
+          variables: {
+            id,
+          },
         });
 
-        setMyTodos((prev) => {
-          return prev.filter((todo) => todo.id !== id).sort(compareTodo);
-        });
+        myTodosVar(
+          myTodosVar()
+            .filter((todo) => todo.id !== id)
+            .sort(compareTodo)
+        );
 
         notification.success({
           message: "Todo deleted successfully",
@@ -84,7 +88,7 @@ export const useTodoList = () => {
         });
       }
     },
-    [compareTodo]
+    [deleteTodoMutation, compareTodo]
   );
 
   /**
@@ -100,17 +104,24 @@ export const useTodoList = () => {
   const changeTodoStatus = useCallback(
     async (id: string, isDone: boolean) => {
       try {
-        const { data } = await axios.post(`/api/v${API_VERSION}/check-todo`, {
-          id,
-          isDone,
+        const { data } = await checkTodoMutation({
+          variables: {
+            id,
+            isDone,
+          },
         });
-        const { todo: changedTodo } = data;
 
-        setMyTodos((prev) => {
-          return prev
-            .map((item) => (item.id === changedTodo.id ? changedTodo : item))
-            .sort(compareTodo);
-        });
+        const { todo } = data;
+
+        myTodosVar(
+          myTodosVar()
+            .map((item) =>
+              item.id === todo.id
+                ? { ...todo, creationTime: +todo.creationTime }
+                : item
+            )
+            .sort(compareTodo)
+        );
       } catch (error) {
         notification.error({
           message: `Failed to update todo status`,
@@ -118,7 +129,7 @@ export const useTodoList = () => {
         });
       }
     },
-    [compareTodo]
+    [compareTodo, checkTodoMutation]
   );
 
   /**
@@ -132,22 +143,53 @@ export const useTodoList = () => {
    *    - Shows fail notification
    */
   useEffect(() => {
-    const fetchInitialTodosFromDb = async () => {
-      try {
-        let response = await axios.get(`/api/v${API_VERSION}/all-todos`);
-        let { data } = response;
-        let { todos } = data;
-        setMyTodos(todos.sort(compareTodo));
-      } catch (error) {
-        notification.error({
-          message: `Failed to get todos from server`,
-          placement: "top",
-        });
-      }
-    };
+    if (myTodosData) {
+      const initialTodos = myTodosData?.me?.todos
+        .slice()
+        .map((item: TodoType) => ({
+          ...item,
+          creationTime: +item.creationTime,
+        }));
 
-    fetchInitialTodosFromDb();
-  }, [compareTodo]);
+      myTodosVar(initialTodos.sort(compareTodo));
+    }
+  }, [compareTodo, myTodosData]);
+
+  useEffect(() => {
+    if (myTodosDataError) {
+      notification.error({
+        message: `Failed to get todos from server`,
+        placement: "top",
+      });
+    }
+  }, [myTodosDataError]);
+
+  useEffect(() => {
+    if (newTodoData) {
+      const { todo } = newTodoData;
+
+      myTodosVar(
+        [...myTodosVar(), { ...todo, creationTime: +todo.creationTime }].sort(
+          compareTodo
+        )
+      );
+
+      notification.success({
+        message: "Todo added successfully",
+        duration: 1,
+        placement: "top",
+      });
+    }
+  }, [newTodoData, compareTodo]);
+
+  useEffect(() => {
+    if (newTodoDataError) {
+      notification.error({
+        message: `Failed to add todo`,
+        placement: "top",
+      });
+    }
+  }, [newTodoDataError]);
 
   return { addNewTodo, myTodos, removeTodoById, changeTodoStatus };
 };

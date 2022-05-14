@@ -4,7 +4,13 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { initializeApp } from "firebase/app";
 import { BrowserRouter } from "react-router-dom";
-import { Auth } from "./components/Auth";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+
+const apolloClient = new ApolloClient({
+  uri: "http://localhost:3000",
+  cache: new InMemoryCache(),
+  credentials: "include",
+});
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -25,9 +31,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter>
-    <Auth>
+    <ApolloProvider client={apolloClient}>
       <App />
-    </Auth>
+    </ApolloProvider>
   </BrowserRouter>
 );
 

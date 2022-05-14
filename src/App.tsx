@@ -1,16 +1,17 @@
 import { Layout, Typography, Image, notification, Modal } from "antd";
 import "antd/dist/antd.css";
-import { useCallback, useContext } from "react";
+import { useCallback, useEffect } from "react";
 import { Route, Routes, Link } from "react-router-dom";
-import { AuthContext } from "./components/Auth";
 import { AuthUserBadge } from "./components/AuthUserBadge";
 import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
-import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { API_VERSION } from "./utils/constants";
+import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
+import { authUserVar } from "./utils/cache";
+import { saveAuthDataToLocalStorage } from "./utils/helperFunctions";
+import { QUERY_LOGOUT, QUERY_MY_INFO } from "./utils/queries";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -20,7 +21,12 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { isLoggedIn, setLoginStatus, user } = useContext(AuthContext);
+  const { isLoggedIn, user } = useReactiveVar(authUserVar);
+
+  const { data: myData, error: myDataError } = useQuery(QUERY_MY_INFO);
+
+  const [logoutQuery, { data: logoutData, error: logoutError }] =
+    useLazyQuery(QUERY_LOGOUT);
 
   /**
    * Logout after user confirmation
@@ -36,31 +42,64 @@ const App = () => {
     Modal.confirm({
       icon: <ExclamationCircleOutlined />,
       content: <Typography.Title level={4}>Are you sure?</Typography.Title>,
-      async onOk() {
-        try {
-          await axios.post(`/auth/v${API_VERSION}/logout`);
-
-          notification.success({
-            message: `Logout successfull`,
-            description: "Taking you to the login page",
-            placement: "top",
-            duration: 0.5,
-          });
-
-          setLoginStatus(false, null);
-        } catch (error) {
-          notification.error({
-            message: `Logout failed`,
-            description: `Please try again.`,
-            placement: "top",
-            duration: 1,
-          });
-        }
+      onOk() {
+        logoutQuery();
       },
     });
-  }, [setLoginStatus]);
+  }, [logoutQuery]);
 
-  //JSX
+  /**
+   * Effect to execute when auth user data is available after the query execution
+   */
+  useEffect(() => {
+    if (myData) {
+      const { me } = myData;
+      saveAuthDataToLocalStorage(true, me);
+      authUserVar({ isLoggedIn: true, user: me });
+    }
+  }, [myData]);
+
+  /**
+   * Effect to execute when the query execution for auth user data fails
+   */
+  useEffect(() => {
+    if (myDataError) {
+      saveAuthDataToLocalStorage(false, null);
+      authUserVar({ isLoggedIn: false, user: null });
+    }
+  }, [myDataError]);
+
+  /**
+   * Effect to execute when logout query succeeds
+   */
+  useEffect(() => {
+    if (logoutData) {
+      notification.success({
+        message: `Logout successfull`,
+        description: "Taking you to the login page",
+        placement: "top",
+        duration: 0.5,
+      });
+      saveAuthDataToLocalStorage(false, null);
+      authUserVar({ isLoggedIn: false, user: null });
+    }
+  }, [logoutData]);
+
+  /**
+   * Effect to execute when logout query fails
+   */
+  useEffect(() => {
+    if (logoutError) {
+      notification.error({
+        message: `Logout failed`,
+        description: `Please try again.`,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  }, [logoutError]);
+
+  // JSX
   return (
     <Layout>
       <Header className={styles.header}>
