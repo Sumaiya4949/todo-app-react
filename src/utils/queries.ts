@@ -17,3 +17,9 @@ export const QUERY_MY_INFO = gql`
     }
   }
 `;
+
+export const QUERY_LOGOUT = gql`
+  query Logout {
+    logout
+  }
+`;

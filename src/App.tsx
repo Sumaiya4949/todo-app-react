@@ -10,10 +10,10 @@ import styles from "./styles/App.module.scss";
 import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { API_VERSION } from "./utils/constants";
-import { useQuery, useReactiveVar } from "@apollo/client";
+import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { authUserVar } from "./utils/cache";
 import { saveAuthDataToLocalStorage } from "./utils/helperFunctions";
-import { QUERY_MY_INFO } from "./utils/queries";
+import { QUERY_LOGOUT, QUERY_MY_INFO } from "./utils/queries";
 import { User } from "./types";
 
 const { Header, Content, Footer } = Layout;
@@ -25,7 +25,11 @@ const { Title } = Typography;
  */
 const App = () => {
   const { isLoggedIn, user } = useReactiveVar(authUserVar);
+
   const { data: myData, error: myDataError } = useQuery(QUERY_MY_INFO);
+
+  const [logoutQuery, { data: logoutData, error: logoutError }] =
+    useLazyQuery(QUERY_LOGOUT);
 
   /**
    * Logout after user confirmation
@@ -41,30 +45,11 @@ const App = () => {
     Modal.confirm({
       icon: <ExclamationCircleOutlined />,
       content: <Typography.Title level={4}>Are you sure?</Typography.Title>,
-      async onOk() {
-        try {
-          await axios.post(`/auth/v${API_VERSION}/logout`);
-
-          notification.success({
-            message: `Logout successfull`,
-            description: "Taking you to the login page",
-            placement: "top",
-            duration: 0.5,
-          });
-
-          saveAuthDataToLocalStorage(false, null);
-          authUserVar({ isLoggedIn: false, user: null });
-        } catch (error) {
-          notification.error({
-            message: `Logout failed`,
-            description: `Please try again.`,
-            placement: "top",
-            duration: 1,
-          });
-        }
+      onOk() {
+        logoutQuery();
       },
     });
-  }, []);
+  }, [logoutQuery]);
 
   useEffect(() => {
     if (myData) {
@@ -80,6 +65,30 @@ const App = () => {
       authUserVar({ isLoggedIn: false, user: null });
     }
   }, [myDataError]);
+
+  useEffect(() => {
+    if (logoutData) {
+      notification.success({
+        message: `Logout successfull`,
+        description: "Taking you to the login page",
+        placement: "top",
+        duration: 0.5,
+      });
+      saveAuthDataToLocalStorage(false, null);
+      authUserVar({ isLoggedIn: false, user: null });
+    }
+  }, [logoutData]);
+
+  useEffect(() => {
+    if (logoutError) {
+      notification.error({
+        message: `Logout failed`,
+        description: `Please try again.`,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  }, [logoutError]);
 
   // JSX
   return (
