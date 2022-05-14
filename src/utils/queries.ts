@@ -8,3 +8,12 @@ export const QUERY_LOGIN = gql`
     }
   }
 `;
+
+export const QUERY_MY_INFO = gql`
+  query WhoAmI {
+    me {
+      id
+      fullname
+    }
+  }
+`;

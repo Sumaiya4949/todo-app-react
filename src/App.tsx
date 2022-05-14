@@ -10,9 +10,11 @@ import styles from "./styles/App.module.scss";
 import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { API_VERSION } from "./utils/constants";
-import { useReactiveVar } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { authUserVar } from "./utils/cache";
 import { saveAuthDataToLocalStorage } from "./utils/helperFunctions";
+import { QUERY_MY_INFO } from "./utils/queries";
+import { User } from "./types";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -23,6 +25,7 @@ const { Title } = Typography;
  */
 const App = () => {
   const { isLoggedIn, user } = useReactiveVar(authUserVar);
+  const { data: myData, error: myDataError } = useQuery(QUERY_MY_INFO);
 
   /**
    * Logout after user confirmation
@@ -63,33 +66,22 @@ const App = () => {
     });
   }, []);
 
-  /**
-   * Effect to fetch currently logged in user from server
-   * @description
-   *  - Fetches currently logged in user from server
-   *  - Saves login status and auth user information
-   *  - If error occurs
-   *    - Erase saved auth user information
-   */
   useEffect(() => {
-    const fethInitialAuthUserFromDb = async () => {
-      try {
-        let response = await axios.get(`/auth/v${API_VERSION}/who-am-i`);
-        let { data } = response;
-        let { user } = data;
+    if (myData) {
+      const { me } = myData;
+      saveAuthDataToLocalStorage(true, me);
+      authUserVar({ isLoggedIn: true, user: me });
+    }
+  }, [myData]);
 
-        saveAuthDataToLocalStorage(true, user);
-        authUserVar({ isLoggedIn: true, user });
-      } catch (error: any) {
-        saveAuthDataToLocalStorage(false, null);
-        authUserVar({ isLoggedIn: false, user: null });
-      }
-    };
+  useEffect(() => {
+    if (myDataError) {
+      saveAuthDataToLocalStorage(false, null);
+      authUserVar({ isLoggedIn: false, user: null });
+    }
+  }, [myDataError]);
 
-    fethInitialAuthUserFromDb();
-  }, []);
-
-  //JSX
+  // JSX
   return (
     <Layout>
       <Header className={styles.header}>
