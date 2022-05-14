@@ -36,7 +36,7 @@ export const useTodoList = () => {
         });
         const { todo } = data;
 
-        myTodosVar([...myTodos, todo].sort(compareTodo));
+        myTodosVar([...myTodosVar(), todo].sort(compareTodo));
 
         notification.success({
           message: "Todo added successfully",
@@ -68,7 +68,11 @@ export const useTodoList = () => {
           data: { id },
         });
 
-        myTodosVar(myTodos.filter((todo) => todo.id !== id).sort(compareTodo));
+        myTodosVar(
+          myTodosVar()
+            .filter((todo) => todo.id !== id)
+            .sort(compareTodo)
+        );
 
         notification.success({
           message: "Todo deleted successfully",
@@ -106,7 +110,7 @@ export const useTodoList = () => {
         const { todo: changedTodo } = data;
 
         myTodosVar(
-          myTodos
+          myTodosVar()
             .map((item) => (item.id === changedTodo.id ? changedTodo : item))
             .sort(compareTodo)
         );
