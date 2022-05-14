@@ -63,3 +63,14 @@ export const MUTATION_DELETE_TODO = gql`
     deleteTodo(id: $id)
   }
 `;
+
+export const MUTATION_CHANGE_TODO_STATUS = gql`
+  mutation CheckTodo($id: String!, $isDone: Boolean!) {
+    todo: changeTodoStatus(id: $id, isDone: $isDone) {
+      id
+      title
+      isDone
+      creationTime
+    }
+  }
+`;

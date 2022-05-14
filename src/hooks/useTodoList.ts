@@ -1,12 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { TodoType } from "../types";
-import axios from "axios";
 import { notification } from "antd";
-import { API_VERSION } from "../utils/constants";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { myTodosVar } from "../utils/cache";
 import {
   MUTATION_ADD_TODO,
+  MUTATION_CHANGE_TODO_STATUS,
   MUTATION_DELETE_TODO,
   QUERY_MY_TODOS,
 } from "../utils/queries";
@@ -26,8 +25,10 @@ export const useTodoList = () => {
 
   const [deleteTodoMutation] = useMutation(MUTATION_DELETE_TODO);
 
+  const [checkTodoMutation] = useMutation(MUTATION_CHANGE_TODO_STATUS);
+
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
-    return todoA.creationTime < todoB.creationTime ? -1 : 1;
+    return +todoA.creationTime < +todoB.creationTime ? -1 : 1;
   }, []);
 
   /**
@@ -87,7 +88,7 @@ export const useTodoList = () => {
         });
       }
     },
-    [deleteTodoMutation]
+    [deleteTodoMutation, compareTodo]
   );
 
   /**
@@ -103,16 +104,18 @@ export const useTodoList = () => {
   const changeTodoStatus = useCallback(
     async (id: string, isDone: boolean) => {
       try {
-        const { data } = await axios.post(`/api/v${API_VERSION}/check-todo`, {
-          id,
-          isDone,
+        const { data } = await checkTodoMutation({
+          variables: {
+            id,
+            isDone,
+          },
         });
 
-        const { todo: changedTodo } = data;
+        const { todo } = data;
 
         myTodosVar(
           myTodosVar()
-            .map((item) => (item.id === changedTodo.id ? changedTodo : item))
+            .map((item) => (item.id === todo.id ? todo : item))
             .sort(compareTodo)
         );
       } catch (error) {
@@ -122,7 +125,7 @@ export const useTodoList = () => {
         });
       }
     },
-    [compareTodo]
+    [compareTodo, checkTodoMutation]
   );
 
   /**
