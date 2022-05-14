@@ -7,14 +7,11 @@ import { LoginForm } from "./pages/LoginForm";
 import { MyTodos } from "./pages/MyTodos";
 import { RegistrationForm } from "./pages/RegistrationForm";
 import styles from "./styles/App.module.scss";
-import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { API_VERSION } from "./utils/constants";
 import { useLazyQuery, useQuery, useReactiveVar } from "@apollo/client";
 import { authUserVar } from "./utils/cache";
 import { saveAuthDataToLocalStorage } from "./utils/helperFunctions";
 import { QUERY_LOGOUT, QUERY_MY_INFO } from "./utils/queries";
-import { User } from "./types";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;

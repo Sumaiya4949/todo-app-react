@@ -1,10 +1,10 @@
 import { Form, Input, Button, Typography, notification } from "antd";
-import axios from "axios";
 import { SHA3 } from "sha3";
 import { useNavigate } from "react-router-dom";
 import { validatePassword } from "../utils/validator";
-import { useCallback } from "react";
-import { API_VERSION } from "../utils/constants";
+import { useCallback, useEffect } from "react";
+import { useMutation } from "@apollo/client";
+import { MUTATION_REGISTER } from "../utils/queries";
 
 const { Title } = Typography;
 
@@ -14,6 +14,8 @@ const { Title } = Typography;
  */
 export const RegistrationForm = () => {
   const navigate = useNavigate();
+
+  const [register, { data, error }] = useMutation(MUTATION_REGISTER);
 
   /**
    * Handle if form submission fails
@@ -41,35 +43,43 @@ export const RegistrationForm = () => {
    * @param {any} values Object containing all the form field values by their field name
    */
   const onFinish = useCallback(
-    async (values: any) => {
+    (values: any) => {
       const hash = new SHA3(512);
       hash.update(values.password);
 
-      try {
-        await axios.put(`/auth/v${API_VERSION}/register`, {
+      register({
+        variables: {
           email: values.email,
           fullname: values.fullname,
           passwordHash: hash.digest("hex"),
-        });
-
-        notification.success({
-          message: `Registration successfull`,
-          description: "Taking you back to login page",
-          placement: "top",
-          duration: 1,
-        });
-
-        navigate("/");
-      } catch (error: any) {
-        notification.error({
-          message: `Registration failed`,
-          description: `${error?.response?.data?.message}. Please try again.`,
-          placement: "top",
-        });
-      }
+        },
+      });
     },
-    [navigate]
+    [register]
   );
+
+  useEffect(() => {
+    if (data) {
+      notification.success({
+        message: `Registration successfull`,
+        description: "Taking you back to login page",
+        placement: "top",
+        duration: 1,
+      });
+
+      navigate("/");
+    }
+  }, [navigate, data]);
+
+  useEffect(() => {
+    if (error) {
+      notification.error({
+        message: `Registration failed`,
+        description: `Please try again.`,
+        placement: "top",
+      });
+    }
+  }, [error]);
 
   return (
     <Form

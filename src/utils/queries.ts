@@ -23,3 +23,13 @@ export const QUERY_LOGOUT = gql`
     logout
   }
 `;
+
+export const MUTATION_REGISTER = gql`
+  mutation Register(
+    $email: String!
+    $passwordHash: String!
+    $fullname: String!
+  ) {
+    register(email: $email, passwordHash: $passwordHash, fullname: $fullname)
+  }
+`;
