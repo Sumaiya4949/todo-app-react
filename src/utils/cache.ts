@@ -1,5 +1,5 @@
 import { makeVar } from "@apollo/client";
-import { AuthUser } from "../types";
+import { AuthUser, TodoType } from "../types";
 
 const initialAuthUserStr = localStorage.getItem("authUser");
 const initialAuthUser =
@@ -12,3 +12,5 @@ export const authUserVar = makeVar<AuthUser>({
   isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
   user: initialAuthUser,
 });
+
+export const myTodosVar = makeVar<TodoType[]>([]);

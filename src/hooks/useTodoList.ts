@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { TodoType } from "../types";
 import axios from "axios";
 import { notification } from "antd";
 import { API_VERSION } from "../utils/constants";
+import { useReactiveVar } from "@apollo/client";
+import { myTodosVar } from "../utils/cache";
 
 /**
  * React custom hook to management of todo list
  * @returns {object} Todo list and some functions to add, remove and check/uncheck funtionality
  */
 export const useTodoList = () => {
-  const [myTodos, setMyTodos] = useState<TodoType[]>([]);
+  const myTodos = useReactiveVar(myTodosVar);
 
   const compareTodo = useCallback((todoA: TodoType, todoB: TodoType) => {
     return todoA.creationTime < todoB.creationTime ? -1 : 1;
@@ -34,9 +36,7 @@ export const useTodoList = () => {
         });
         const { todo } = data;
 
-        setMyTodos((prev) => {
-          return [...prev, todo].sort(compareTodo);
-        });
+        myTodosVar([...myTodos, todo].sort(compareTodo));
 
         notification.success({
           message: "Todo added successfully",
@@ -68,9 +68,7 @@ export const useTodoList = () => {
           data: { id },
         });
 
-        setMyTodos((prev) => {
-          return prev.filter((todo) => todo.id !== id).sort(compareTodo);
-        });
+        myTodosVar(myTodos.filter((todo) => todo.id !== id).sort(compareTodo));
 
         notification.success({
           message: "Todo deleted successfully",
@@ -104,13 +102,14 @@ export const useTodoList = () => {
           id,
           isDone,
         });
+
         const { todo: changedTodo } = data;
 
-        setMyTodos((prev) => {
-          return prev
+        myTodosVar(
+          myTodos
             .map((item) => (item.id === changedTodo.id ? changedTodo : item))
-            .sort(compareTodo);
-        });
+            .sort(compareTodo)
+        );
       } catch (error) {
         notification.error({
           message: `Failed to update todo status`,
@@ -137,7 +136,7 @@ export const useTodoList = () => {
         let response = await axios.get(`/api/v${API_VERSION}/all-todos`);
         let { data } = response;
         let { todos } = data;
-        setMyTodos(todos.sort(compareTodo));
+        myTodosVar(todos.sort(compareTodo));
       } catch (error) {
         notification.error({
           message: `Failed to get todos from server`,
