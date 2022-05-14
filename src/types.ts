@@ -13,3 +13,8 @@ export type User = {
   id: string;
   fullname: string;
 };
+
+export type AuthUser = {
+  isLoggedIn: boolean;
+  user: User | null;
+};

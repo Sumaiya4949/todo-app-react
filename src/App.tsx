@@ -11,6 +11,8 @@ import styles from "./styles/App.module.scss";
 import axios from "axios";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { API_VERSION } from "./utils/constants";
+import { useReactiveVar } from "@apollo/client";
+import { authUserVar } from "./utils/cache";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -20,7 +22,9 @@ const { Title } = Typography;
  * @returns {JSX} JSX of the app component
  */
 const App = () => {
-  const { isLoggedIn, setLoginStatus, user } = useContext(AuthContext);
+  const { setLoginStatus } = useContext(AuthContext);
+
+  const { isLoggedIn, user } = useReactiveVar(authUserVar);
 
   /**
    * Logout after user confirmation

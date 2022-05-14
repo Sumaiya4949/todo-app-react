@@ -2,11 +2,10 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { User } from "../types";
 import axios from "axios";
 import { API_VERSION } from "../utils/constants";
+import { authUserVar } from "../utils/cache";
 
 type AuthInfo = {
-  isLoggedIn: boolean;
   setLoginStatus: (status: boolean, user: User | null) => void;
-  user: User | null;
 };
 
 type PropType = {
@@ -14,9 +13,7 @@ type PropType = {
 };
 
 export const AuthContext = createContext<AuthInfo>({
-  isLoggedIn: false,
   setLoginStatus: () => {},
-  user: null,
 });
 
 /**
@@ -27,18 +24,6 @@ export const AuthContext = createContext<AuthInfo>({
 export const Auth = (props: PropType) => {
   const { children } = props;
 
-  const initialLoginState = localStorage.getItem("isLoggedIn") === "true";
-
-  const initialAuthUserStateStr = localStorage.getItem("authUser");
-
-  const initialAuthUserState =
-    initialAuthUserStateStr && initialAuthUserStateStr !== "null"
-      ? JSON.parse(initialAuthUserStateStr)
-      : null;
-
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialLoginState);
-  const [authUser, setAuthUser] = useState<User | null>(initialAuthUserState);
-
   /**
    * Set user and user's login status to local storage and state
    * @description
@@ -48,10 +33,13 @@ export const Auth = (props: PropType) => {
    * @param {User} user Information of currently logged user
    */
   const setLoginStatus = useCallback((status: boolean, user: User | null) => {
-    setIsLoggedIn(status);
-    setAuthUser(user);
     localStorage.setItem("isLoggedIn", status.toString());
     localStorage.setItem("authUser", JSON.stringify(user));
+
+    authUserVar({
+      isLoggedIn: status,
+      user: user,
+    });
   }, []);
 
   /**
@@ -79,9 +67,7 @@ export const Auth = (props: PropType) => {
 
   //JSX
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, setLoginStatus, user: authUser }}
-    >
+    <AuthContext.Provider value={{ setLoginStatus }}>
       {children}
     </AuthContext.Provider>
   );
